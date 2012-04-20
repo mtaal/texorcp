@@ -1,4 +1,4 @@
-package org.eclipse.emf.texo.examples.rcp;
+package org.eclipse.emf.texo.examples.rcp.application;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;

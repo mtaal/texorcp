@@ -1,4 +1,4 @@
-package org.eclipse.emf.texo.examples.rcp;
+package org.eclipse.emf.texo.examples.rcp.application;
 
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;

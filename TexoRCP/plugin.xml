@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="org.eclipse.emf.texo.examples.rcp.TexoRCPApplication">
+               class="org.eclipse.emf.texo.examples.rcp.application.TexoRCPApplication">
          </run>
       </application>
    </extension>
@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Perspective"
-            class="org.eclipse.emf.texo.examples.rcp.Perspective"
+            class="org.eclipse.emf.texo.examples.rcp.application.Perspective"
             id="TexoRCP.perspective">
       </perspective>
    </extension>
@@ -23,8 +23,8 @@
          point="org.eclipse.ui.views">
       <view
             name="View"
-            class="org.eclipse.emf.texo.examples.rcp.View"
-            id="TexoRCP.view">
+            class="org.eclipse.emf.texo.examples.rcp.application.View"
+            id="org.eclipse.emf.texo.examples.rcp.application.view">
       </view>
    </extension>
    <extension
@@ -36,7 +36,7 @@
                minimized="false"
                relative="org.eclipse.ui.editorss"
                relationship="left"
-               id="TexoRCP.view">
+               id="org.eclipse.emf.texo.examples.rcp.application.view">
          </view>
       </perspectiveExtension>
    </extension>
