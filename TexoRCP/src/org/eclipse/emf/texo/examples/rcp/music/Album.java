@@ -214,7 +214,7 @@ public interface Album extends EObject {
 	 * @return the value of the '<em>Ratings</em>' attribute list.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Rating
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getAlbum_Ratings()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	EList<Rating> getRatings();

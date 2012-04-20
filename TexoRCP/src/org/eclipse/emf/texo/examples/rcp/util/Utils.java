@@ -1,9 +1,18 @@
 package org.eclipse.emf.texo.examples.rcp.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
+import org.eclipse.emf.texo.examples.rcp.music.Genre;
+import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
+import org.eclipse.emf.texo.examples.rcp.music.Song;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
@@ -34,17 +43,19 @@ public class Utils {
 			"ws", "ye", "yt", "za", "zm", "zw" };
 
 	private static Map<String, Image> imageCache = new HashMap<String, Image>();
+	
+	private static SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
 	public static String[] getCountryCodes() {
 		return ccodes;
 	}
 
 	public static String getCountryCodeFlag(String countryCode) {
-		return "/icons/flags/" + countryCode + ".png";
+		return "icons/flags/" + countryCode + ".png";
 	}
 
 	public static String getRating(Rating rating) {
-		return "/icons/rating/" + rating.name() + ".gif";
+		return "icons/rating/" + rating.name() + ".gif";
 	}
 
 	public static Image getImage(String name) {
@@ -61,5 +72,70 @@ public class Utils {
 		for (Image img : imageCache.values()) {
 			img.dispose();
 		}
+	}
+
+	public static final Album getSampleAlbum() {
+		Album justBeFree = MusicFactory.eINSTANCE.createAlbum();
+		justBeFree.setId(1);
+		justBeFree.setName("Just Be Free ");
+		justBeFree.setReleaseDate(getDate("19.6.2001"));
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.LOW);
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.LOW);
+		justBeFree.setVersion((long) 1);
+		
+		Artist artist = MusicFactory.eINSTANCE.createArtist();
+		artist.setBirthDate(getDate("19.12.1980"));
+		artist.setFirstName("Christina");
+		artist.setLastName("Aguilera");
+		
+		Genre pop = MusicFactory.eINSTANCE.createGenre();
+		pop.setId(1);
+		pop.setName("Pop");
+		pop.setVersion((long) 1);
+		artist.setGenre(pop);
+		justBeFree.getGenres().add(pop);
+		
+		justBeFree.setArtist(artist);
+		justBeFree.getSongs().add(getSong(1, "Just Be Free", 1));
+		justBeFree.getSongs().add(getSong(2, "By Your Side", 2));
+		justBeFree.getSongs().add(getSong(3, "Move It (Dance Mix)", 3));
+		justBeFree.getSongs().add(getSong(4, "Our Day Will Come", 4));
+		justBeFree.getSongs().add(getSong(5, "Believe Me", 5));
+		justBeFree.getSongs().add(getSong(6, "Make Me Happy", 6));
+		justBeFree.getSongs().add(getSong(7, "Dream A Dream", 7));
+		justBeFree.getSongs().add(getSong(8, "Move It", 8));
+		justBeFree.getSongs().add(getSong(9, "The Way You Talk To Me", 9));
+		justBeFree.getSongs().add(getSong(10, "Running Out Of Time", 10));
+		justBeFree.getSongs().add(getSong(11, "Believe Me (Dance Mix)", 11));
+		justBeFree.getSongs().add(getSong(12, "Just Be Free (remix) ", 12));
+
+		Country ny = MusicFactory.eINSTANCE.createCountry();
+		ny.setName("New York, United States");
+		ny.setCode("us");
+		artist.setCountry(ny);
+		
+		return justBeFree;
+	}
+	
+	private static Song getSong(long id, String name, int track) {
+		Song song = MusicFactory.eINSTANCE.createSong();
+		song.setId(id);
+		song.setName(name);
+		song.setTrack(track);
+		song.setVersion((long) 1);
+		return song;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static Date getDate(String dateString) {
+		try {
+			return formatter.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

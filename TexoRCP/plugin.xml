@@ -59,6 +59,17 @@
          <menu
                label="File">
             <command
+                  commandId="org.eclipse.emf.texo.examples.rcp.commands.load"
+                  label="load">
+            </command>
+            <command
+                  commandId="org.eclipse.emf.texo.examples.rcp.commands.save"
+                  label="save">
+            </command>
+            <separator
+                  name="exitSeperator">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.exit"
                   label="Exit">
             </command>

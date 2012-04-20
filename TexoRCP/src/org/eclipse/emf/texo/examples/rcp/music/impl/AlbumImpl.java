@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -345,7 +346,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 */
 	public EList<Rating> getRatings() {
 		if (ratings == null) {
-			ratings = new EDataTypeUniqueEList<Rating>(Rating.class, this, MusicPackage.ALBUM__RATINGS);
+			ratings = new EDataTypeEList<Rating>(Rating.class, this, MusicPackage.ALBUM__RATINGS);
 		}
 		return ratings;
 	}

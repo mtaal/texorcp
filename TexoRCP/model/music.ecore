@@ -67,8 +67,8 @@
         <details key="value" value="@OneToMany"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ratings" upperBound="-1"
-        eType="#//Rating"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ratings" unique="false"
+        upperBound="-1" eType="#//Rating"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Country">
     <eAnnotations source="elver.org/displayLabel">
