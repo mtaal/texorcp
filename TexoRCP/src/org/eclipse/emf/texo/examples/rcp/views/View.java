@@ -1,4 +1,4 @@
-package org.eclipse.emf.texo.examples.rcp.application;
+package org.eclipse.emf.texo.examples.rcp.views;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -13,7 +13,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class View extends ViewPart {
-	public static final String ID = "org.eclipse.emf.texo.examples.rcp.application.view";
+	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
 
 	private TableViewer viewer;
 

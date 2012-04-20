@@ -23,8 +23,8 @@
          point="org.eclipse.ui.views">
       <view
             name="View"
-            class="org.eclipse.emf.texo.examples.rcp.application.View"
-            id="org.eclipse.emf.texo.examples.rcp.application.view">
+            class="org.eclipse.emf.texo.examples.rcp.views.View"
+            id="org.eclipse.emf.texo.examples.rcp.views.view">
       </view>
    </extension>
    <extension
@@ -36,7 +36,7 @@
                minimized="false"
                relative="org.eclipse.ui.editorss"
                relationship="left"
-               id="org.eclipse.emf.texo.examples.rcp.application.view">
+               id="org.eclipse.emf.texo.examples.rcp.views.view">
          </view>
       </perspectiveExtension>
    </extension>
