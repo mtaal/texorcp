@@ -70,7 +70,6 @@ public class EditorView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		this.parentShell = parent.getShell();
-		MusicFactory.eINSTANCE.eClass();
 		adapter = new AdapterImpl() {
 
 			public void notifyChanged(Notification notification) {

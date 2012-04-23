@@ -17,6 +17,7 @@ public class Controller {
 			instance = new Controller();
 			service = getPersistenceService();
 			connect();
+			// LOADS THE DEFAULT ALBUM
 			album = Utils.getSampleAlbum();
 		}
 		return instance;
