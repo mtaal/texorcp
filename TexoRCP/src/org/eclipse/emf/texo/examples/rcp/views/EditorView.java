@@ -15,7 +15,6 @@ import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddRatingDialog;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddSongDialog;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
-import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
