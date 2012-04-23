@@ -1,49 +1,162 @@
 package org.eclipse.emf.texo.examples.rcp.views;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
+import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
-import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.Rating;
+import org.eclipse.emf.texo.examples.rcp.music.Song;
+import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class View extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
-	private Text name;
-	private DateTime releaseDate;
 	private Adapter adapter;
 
 	private BindingFactory bf = BindingFactory.getInstance();
+	private Label lblFirstname;
+	private Label lblLastname;
+	private Label lblBirthdate;
+	private Label lblLivingAt;
+	private Label lblAlbumName;
+	private Label lblCountryCode;
+	private Label lblCountryName;
+	private List songList;
+	private Label lblRatedHigh;
+	private Label lblRatedLow;
+	private Label lblGenres;
+	private Label lblRatedCount;
 
 	public View() {
 	}
 
+	public void setCountry(Country country) {
+		if (country == null) {
+			return;
+		}
+		lblCountryCode.setImage(Utils.getImage(Utils.getCountryCodeFlag(country
+				.getCode())));
+		lblCountryName.setText(country.getName());
+	}
+
+	public void setAlbum(Album album) {
+		if (album == null) {
+			return;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM yyyy");
+		lblAlbumName.setText(String.format("%s (%s)", album.getName(),
+				sdf.format(album.getReleaseDate())));
+
+		setArtist(album.getArtist());
+		EList<Genre> genres = album.getGenres();
+		if (genres != null) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < genres.size(); i++) {
+				sb.append(genres.get(i).getName());
+				if (i < genres.size() - 1) {
+					sb.append(", ");
+				}
+			}
+			lblGenres.setText(sb.toString());
+		}
+
+		EList<Rating> ratings = album.getRatings();
+		if (ratings != null) {
+			int highCount = 0;
+			for (int i = 0; i < ratings.size(); i++) {
+				if (ratings.get(i).equals(Rating.HIGH)) {
+					highCount++;
+				}
+			}
+			lblRatedHigh.setImage(Utils.getImage(Utils.getRating(Rating.HIGH)));
+			lblRatedCount.setText(String.format("%d Vs %s", highCount,
+					ratings.size() - highCount));
+			lblRatedLow.setImage(Utils.getImage(Utils.getRating(Rating.LOW)));
+		}
+
+		EList<Song> songs = album.getSongs();
+		if (songs != null) {
+			String[] titles = new String[songs.size()];
+
+			songList.removeAll();
+			for (int i = 0; i < songs.size(); i++) {
+				Song song = songs.get(i);
+				String trackNumber = String.format("%d", song.getTrack());
+				if (trackNumber.length() < 2) {
+					trackNumber = "0" + trackNumber;
+				}
+				titles[i] = String.format("%s - %s", trackNumber,
+						song.getName());
+			}
+			Arrays.sort(titles);
+			songList.setItems(titles);
+		}
+	}
+
+	public void setArtist(Artist artist) {
+		if (artist == null) {
+			return;
+		}
+		lblFirstname.setText(artist.getFirstName());
+		lblLastname.setText(artist.getLastName());
+		lblBirthdate.setText(DateFormat.getDateInstance(DateFormat.LONG)
+				.format(artist.getBirthDate()));
+		setCountry(artist.getCountry());
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
+
+		// register the eAdapter
 		MusicFactory.eINSTANCE.eClass();
 		adapter = new AdapterImpl() {
 
 			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
-				System.out.println("View (2) - model has changed!!!");
+				 super.notifyChanged(notification);
+				try {
+					// System.out.println("View (2) - model has changed!!!");
+					// System.out.println(notification.getNotifier().getClass()
+					// .getSimpleName()
+					// + " -> " + notification.getNewValue());
+					if (notification.getNotifier() instanceof Album) {
+						setAlbum((Album) notification.getNotifier());
+					} else if (notification.getNotifier() instanceof Artist) {
+						setArtist((Artist) notification.getNotifier());
+					} else if (notification.getNotifier() instanceof Country) {
+						setCountry((Country) notification.getNotifier());
+					}
+				} catch (Exception ignoreMe) {
+					// this raises when we close the application, because emf
+					// wants to update but the widgets are already disposed
+				}
 			}
 		};
-		
+
 		final Album album = Controller.getAlbum();
 		album.eAdapters().add(adapter);
-		
-		System.out.println("View added eAdapter");
+		album.getArtist().eAdapters().add(adapter);
+		album.getArtist().getCountry().eAdapters().add(adapter);
+
+		// System.out.println("View added eAdapter");
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -52,93 +165,95 @@ public class View extends ViewPart {
 		gridLayout.verticalSpacing = 0;
 		parent.setLayout(gridLayout);
 
-		// ALBUM GROUP
-		Group grpAlbum = new Group(parent, SWT.NONE);
-		grpAlbum.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
-		grpAlbum.setText("album");
-		grpAlbum.setLayout(new GridLayout(2, false));
+		Group grpAboutTheArtist = new Group(parent, SWT.NONE);
+		grpAboutTheArtist.setLayout(new GridLayout(2, false));
+		grpAboutTheArtist.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+		grpAboutTheArtist.setText("about the Artist");
 
-		// <!-- NAME
-		Label lblName = new Label(grpAlbum, SWT.NONE);
-		lblName.setText("name");
-
-		name = new Text(grpAlbum, SWT.BORDER);
-		name.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
-		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME, true);
-		// NAME -->
-		// <!-- RELEASE DATE
-		Label lblReleaseDate = new Label(grpAlbum, SWT.NONE);
-		lblReleaseDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		lblFirstname = new Label(grpAboutTheArtist, SWT.RIGHT);
+		lblFirstname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		lblReleaseDate.setText("release Date");
+		lblFirstname.setText("firstName");
 
-		releaseDate = new DateTime(grpAlbum, SWT.BORDER);
-		releaseDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+		lblLastname = new Label(grpAboutTheArtist, SWT.NONE);
+		lblLastname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
+		lblLastname.setText("lastname");
 
-		bf.bind(getClass(), releaseDate, album,
-				MusicPackage.Literals.ALBUM__RELEASE_DATE, false);
-		// RELEASE DATE -->
+		Label lblWasBorn = new Label(grpAboutTheArtist, SWT.RIGHT);
+		lblWasBorn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		lblWasBorn.setText("was born");
 
-		// GROUP ARTIST
-		Group grpArtist = new Group(parent, SWT.NONE);
-		grpArtist.setLayout(new GridLayout(2, false));
-		grpArtist.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+		lblBirthdate = new Label(grpAboutTheArtist, SWT.NONE);
+		lblBirthdate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		lblBirthdate.setText("birthdate");
+
+		lblLivingAt = new Label(grpAboutTheArtist, SWT.CENTER);
+		lblLivingAt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 2, 1));
-		grpArtist.setText("artist");
+		lblLivingAt.setText("living at");
 
-		Label artistFirstName = new Label(grpArtist, SWT.NONE);
-		artistFirstName.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true,
+		lblCountryCode = new Label(grpAboutTheArtist, SWT.NONE);
+		lblCountryCode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		// works with FeaturePath and without! - last name example will be done
-		// with FeaturePath
-		bf.bind(getClass(), artistFirstName, album.getArtist(),
-				MusicPackage.Literals.ARTIST__FIRST_NAME, true);
+		lblCountryCode.setAlignment(SWT.RIGHT);
+		lblCountryCode.setText("code");
 
-		Label artistLastName = new Label(grpArtist, SWT.NONE);
-		artistLastName.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true,
-				false, 1, 1));
-		bf.bind(getClass(), artistLastName, album.getArtist(),
-				MusicPackage.Literals.ARTIST__LAST_NAME, true);
-		// LAST NAME -->
+		lblCountryName = new Label(grpAboutTheArtist, SWT.NONE);
+		lblCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+				true, 1, 1));
+		lblCountryName.setText("countryname");
 
-		// <!-- BIRTHDAY
+		Group grpAboutTheAlbum = new Group(parent, SWT.NONE);
+		grpAboutTheAlbum.setLayout(new GridLayout(3, false));
+		grpAboutTheAlbum.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1));
+		grpAboutTheAlbum.setText("about the album");
 
-		Label lblBirthdate = new Label(grpArtist, SWT.NONE);
-		lblBirthdate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
-				false, 1, 1));
-		lblBirthdate.setText("was born on");
+		lblAlbumName = new Label(grpAboutTheAlbum, SWT.CENTER);
+		lblAlbumName
+				.setFont(SWTResourceManager.getFont("Tahoma", 16, SWT.BOLD));
+		lblAlbumName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 3, 1));
+		lblAlbumName.setText("title");
 
-		Label dtBirthday = new Label(grpArtist, SWT.NONE);
-		dtBirthday.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 1, 1));
-		bf.bind(getClass(), dtBirthday, album.getArtist(),
-				MusicPackage.Literals.ARTIST__BIRTH_DATE, false);
-		// BIRTHDAY -->
+		lblGenres = new Label(grpAboutTheAlbum, SWT.CENTER);
+		lblGenres.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				3, 1));
+		lblGenres.setText("New Label");
 
-		// GROUP COUNTRY
-		Group grpCountry = new Group(grpArtist, SWT.NONE);
-		grpCountry.setLayout(new GridLayout(2, false));
-		grpCountry.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 2, 1));
-		grpCountry.setText("country");
+		lblRatedHigh = new Label(grpAboutTheAlbum, SWT.RIGHT);
+		GridData gd_lblRatedHigh = new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1);
+		gd_lblRatedHigh.widthHint = 32;
+		gd_lblRatedHigh.heightHint = 16;
+		lblRatedHigh.setLayoutData(gd_lblRatedHigh);
+		lblRatedHigh.setText("rated High");
 
-		Label lblCountryFlag = new Label(grpCountry, SWT.NONE);
-		lblCountryFlag.setText("flag");
+		lblRatedCount = new Label(grpAboutTheAlbum, SWT.CENTER);
+		GridData gd_lblRatedCount = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
+		gd_lblRatedCount.widthHint = 50;
+		lblRatedCount.setLayoutData(gd_lblRatedCount);
+		lblRatedCount.setText("ratedHighCount");
 
-		bf.bind(getClass(), lblCountryFlag, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__CODE, false);
-		// COUNTRY CODE -->
-		// <!-- COUNTRY NAME
-		Label lblCountryName = new Label(grpCountry, SWT.NONE);
-		lblCountryName.setText("name");
+		lblRatedLow = new Label(grpAboutTheAlbum, SWT.NONE);
+		GridData gd_lblRatedLow = new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1);
+		gd_lblRatedLow.heightHint = 16;
+		lblRatedLow.setLayoutData(gd_lblRatedLow);
+		lblRatedLow.setText("rated Low");
 
-		bf.bind(getClass(), lblCountryName, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__NAME, true);
-
+		songList = new List(grpAboutTheAlbum, SWT.BORDER);
+		songList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3,
+				1));
 		// COUNTRY NAME -->
+
+		// get an album if there is already one available
+		setAlbum(Controller.getAlbum());
 	}
 
 	// public void setAlbum(Album album) {

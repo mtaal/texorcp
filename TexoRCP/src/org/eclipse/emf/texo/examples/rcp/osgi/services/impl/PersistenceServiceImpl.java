@@ -34,10 +34,10 @@ public class PersistenceServiceImpl implements PersistenceService {
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource res = resSet.getResource(xmlUri, false);
 		if (res == null) {
-			System.out.println("created a new resource");
+//			System.out.println("created a new resource");
 			resource = resSet.createResource(xmlUri);
 		} else {
-			System.out.println("using existing resource");
+//			System.out.println("using existing resource");
 			resource = res;
 		}
 		return true;
@@ -68,14 +68,6 @@ public class PersistenceServiceImpl implements PersistenceService {
 
 	@Override
 	public boolean save(Album album) {
-		System.out.println("album==null -> " + (album == null));
-		System.out.println("trying to save to: " + xmlUri);
-		// ARGH?! how does this dirty stuff work!?
-		// if (!album.eResource().isModified()){
-		// // no saving needed -> succeeded
-		// return true;
-		// }
-		// else {
 		System.out.println("resource==null -> " + (resource == null));
 		System.out.println("resource.getContents()==null -> "
 				+ (resource.getContents() == null));

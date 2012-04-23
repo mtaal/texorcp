@@ -1,6 +1,5 @@
 package org.eclipse.emf.texo.examples.rcp.controller;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
@@ -11,7 +10,6 @@ import org.osgi.framework.ServiceReference;
 public class Controller {
 	private static Controller instance;
 	private static Album album;
-	private Adapter adapter;
 	private static PersistenceService service;
 
 	public static Controller getInstance() {
@@ -26,18 +24,13 @@ public class Controller {
 
 	public static boolean connect() {
 		getInstance();
-		// init
-		// Initialize the model
-//		MusicPackage.eINSTANCE.eClass();
-		//
-		System.out.println("connected");
+//		System.out.println("connected");
 		return service.connect();
 	}
 
 	public static boolean isConnected() {
 		getInstance();
-//		return service.isConnected();
-		return true;
+		return service.isConnected();
 	}
 
 	public static boolean disconnect() {

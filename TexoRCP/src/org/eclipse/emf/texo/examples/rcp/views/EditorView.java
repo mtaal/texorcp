@@ -1,7 +1,8 @@
 package org.eclipse.emf.texo.examples.rcp.views;
 
+import java.util.Iterator;
+
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -9,6 +10,9 @@ import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
+import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddGenreDialog;
+import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddRatingDialog;
+import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddSongDialog;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
@@ -21,10 +25,11 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -35,33 +40,42 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class EditorView extends ViewPart implements ISaveablePart2 {
+public class EditorView extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.editorview";
 	private Text name;
 	private DateTime releaseDate;
 	private Text artistFirstName;
 	private Text artistLastName;
 	private Adapter adapter;
+	private Shell parentShell;
 
 	private BindingFactory bf = BindingFactory.getInstance();
+	private TableViewer viewerSongs;
+	private TableViewer viewerGenre;
+	private TableViewer viewerRating;
 
 	public EditorView() {
 	}
 
+	public Shell getParentShell() {
+		return parentShell;
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
+		this.parentShell = parent.getShell();
 		MusicFactory.eINSTANCE.eClass();
 		adapter = new AdapterImpl() {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				System.out.println("View (1) - model has changed!!!");
+//				System.out.println("View (1) - model has changed!!!");
 			}
 		};
 		final Album album = Controller.getAlbum();
@@ -73,35 +87,6 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 		gridLayout.marginHeight = 0;
 		gridLayout.verticalSpacing = 0;
 		parent.setLayout(gridLayout);
-
-		Button button1 = new Button(parent, SWT.PUSH);
-		button1.setText("Write model to console");
-		button1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				System.out.println(album.getName());
-				System.out.println(album.getReleaseDate());
-				System.out.println(album.getArtist().getFirstName());
-				System.out.println(album.getArtist().getCountry().getCode());
-			}
-		});
-
-		Button button2 = new Button(parent, SWT.PUSH);
-		button2.setText("Change model");
-		button2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				String reversedNumber = new StringBuffer(album.getName())
-						.reverse().toString();
-				album.setName(reversedNumber);
-				String reversedArtistFirstName = new StringBuffer(album
-						.getArtist().getFirstName()).reverse().toString();
-				album.getArtist().setFirstName(reversedArtistFirstName);
-				String reversedArtistLastName = new StringBuffer(album
-						.getArtist().getLastName()).reverse().toString();
-				album.getArtist().setLastName(reversedArtistLastName);
-			}
-		});
 
 		// ALBUM GROUP
 		Group grpAlbum = new Group(parent, SWT.NONE);
@@ -234,8 +219,7 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 		gd_grpRatings.heightHint = 100;
 		grpRatings.setLayoutData(gd_grpRatings);
 
-		// emf binding for table
-		TableViewer viewerRating = new TableViewer(grpRatings);
+		viewerRating = new TableViewer(grpRatings);
 		ObservableListContentProvider cp = new ObservableListContentProvider();
 		viewerRating.setContentProvider(cp);
 
@@ -247,12 +231,43 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 				MusicPackage.Literals.ALBUM__RATINGS).observe(album);
 		viewerRating.setInput(ratingData);
 
-		 // btn to add a rating
+		viewerRating.getTable().addKeyListener(new KeyListener() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.DEL) {
+					StructuredSelection structuredSelection = (StructuredSelection) viewerRating
+							.getSelection();
+					// or iterate over all elements
+					for (Iterator<Rating> iterator = structuredSelection
+							.iterator(); iterator.hasNext();) {
+						Rating g = iterator.next();
+						album.getRatings().remove(g);
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+
+		// btn to add a rating
 		Button btnAddRating = new Button(grpRatings, SWT.NONE);
+		btnAddRating.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AddRatingDialog d = new AddRatingDialog(getParentShell(),
+						SWT.DIALOG_TRIM);
+				Rating rating = (Rating) d.open();
+				album.getRatings().add(rating);
+			}
+		});
 		btnAddRating.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnAddRating.setText("add Rating");
-		
+
 		// end rating
 
 		Group grpGenres = new Group(parent, SWT.NONE);
@@ -263,51 +278,108 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 		grpGenres.setLayoutData(gd_grpGenres);
 		grpGenres.setText("genres");
 
-		TableViewer viewerGenre = new TableViewer(grpGenres);
+		viewerGenre = new TableViewer(grpGenres);
 		viewerGenre.setContentProvider(new ObservableListContentProvider());
 		viewerGenre.setLabelProvider(new GenreLabelProvider());
 		viewerGenre.getTable().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
+		viewerGenre.getTable().addKeyListener(new KeyListener() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.DEL) {
+					StructuredSelection structuredSelection = (StructuredSelection) viewerGenre
+							.getSelection();
+					// or iterate over all elements
+					for (Iterator<Genre> iterator = structuredSelection
+							.iterator(); iterator.hasNext();) {
+						Genre g = iterator.next();
+						album.getGenres().remove(g);
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+
 		IObservableList genreData = EMFProperties.list(
 				MusicPackage.Literals.ALBUM__GENRES).observe(album);
 		viewerGenre.setInput(genreData);
-		System.out.println("genreData.size() = "+genreData.size());
 
-		 // btn to add a genre
+		// btn to add a genre
 		Button btnAddGenre = new Button(grpGenres, SWT.NONE);
 		btnAddGenre.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		btnAddGenre.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// cGenre.getSelectionIndex();
-				// genreList.add();
+				AddGenreDialog d = new AddGenreDialog(getParentShell(),
+						SWT.DIALOG_TRIM);
+				Genre genre = (Genre) d.open();
+				if (genre != null) {
+					album.getGenres().add(genre);
+				}
 			}
 		});
 		btnAddGenre.setText("add Genre");
 
 		Group grpSongs = new Group(parent, SWT.NONE);
 		grpSongs.setLayout(new GridLayout(1, false));
-		GridData gd_grpSongs = new GridData(SWT.FILL, SWT.CENTER, true, false,
+		GridData gd_grpSongs = new GridData(SWT.FILL, SWT.FILL, true, true,
 				2, 1);
 		gd_grpSongs.heightHint = 100;
 		grpSongs.setLayoutData(gd_grpSongs);
 		grpSongs.setText("songs");
 
-		TableViewer viewerSongs = new TableViewer(grpSongs);
+		viewerSongs = new TableViewer(grpSongs);
+		viewerSongs.getTable().addKeyListener(new KeyListener() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.DEL) {
+					StructuredSelection structuredSelection = (StructuredSelection) viewerSongs
+							.getSelection();
+					// or iterate over all elements
+					for (Iterator<Song> iterator = structuredSelection
+							.iterator(); iterator.hasNext();) {
+						Song s = iterator.next();
+						album.getSongs().remove(s);
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
 		viewerSongs.setContentProvider(new ObservableListContentProvider());
 		viewerSongs.setLabelProvider(new SongLabelProvider());
 		viewerSongs.getTable().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 		IObservableList songsData = EMFProperties.list(
 				MusicPackage.Literals.ALBUM__SONGS).observe(album);
 		viewerSongs.setInput(songsData);
 
 		// btn to add a song
-		
+
 		Button btnAddSong = new Button(grpSongs, SWT.NONE);
+		btnAddSong.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AddSongDialog s = new AddSongDialog(getParentShell(),
+						SWT.DIALOG_TRIM);
+				Song song = (Song) s.open();
+				if (s != null) {
+					album.getSongs().add(song);
+				}
+			}
+		});
 		btnAddSong.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnAddSong.setText("add Song");
@@ -319,7 +391,6 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 	}
 
 	public void dispose() {
@@ -375,41 +446,5 @@ public class EditorView extends ViewPart implements ISaveablePart2 {
 			return PlatformUI.getWorkbench().getSharedImages()
 					.getImage(ISharedImages.IMG_OBJ_ELEMENT);
 		}
-	}
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void doSaveAs() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isDirty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSaveOnCloseNeeded() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int promptToSaveOnClose() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

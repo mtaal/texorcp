@@ -14,7 +14,10 @@ import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Monitor;
+import org.eclipse.swt.widgets.Shell;
 
 public class Utils {
 	private static String[] ccodes = new String[] { "ad", "ae", "af", "ag",
@@ -139,5 +142,14 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void center(Shell shell) {
+		Monitor primary = Display.getDefault().getPrimaryMonitor ();
+		Rectangle bounds = primary.getBounds ();
+		Rectangle rect = shell.getBounds ();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation (x, y);
 	}
 }
