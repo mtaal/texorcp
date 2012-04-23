@@ -153,7 +153,7 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 	protected Country country;
 
 	/**
-	 * The cached value of the '{@link #getGenre() <em>Genre</em>}' containment reference.
+	 * The cached value of the '{@link #getGenre() <em>Genre</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getGenre()
@@ -335,6 +335,14 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 	 * @generated
 	 */
 	public Genre getGenre() {
+		if (genre != null && genre.eIsProxy()) {
+			InternalEObject oldGenre = (InternalEObject)genre;
+			genre = (Genre)eResolveProxy(oldGenre);
+			if (genre != oldGenre) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MusicPackage.ARTIST__GENRE, oldGenre, genre));
+			}
+		}
 		return genre;
 	}
 
@@ -343,14 +351,8 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetGenre(Genre newGenre, NotificationChain msgs) {
-		Genre oldGenre = genre;
-		genre = newGenre;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MusicPackage.ARTIST__GENRE, oldGenre, newGenre);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public Genre basicGetGenre() {
+		return genre;
 	}
 
 	/**
@@ -359,17 +361,10 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 	 * @generated
 	 */
 	public void setGenre(Genre newGenre) {
-		if (newGenre != genre) {
-			NotificationChain msgs = null;
-			if (genre != null)
-				msgs = ((InternalEObject)genre).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MusicPackage.ARTIST__GENRE, null, msgs);
-			if (newGenre != null)
-				msgs = ((InternalEObject)newGenre).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MusicPackage.ARTIST__GENRE, null, msgs);
-			msgs = basicSetGenre(newGenre, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MusicPackage.ARTIST__GENRE, newGenre, newGenre));
+		Genre oldGenre = genre;
+		genre = newGenre;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MusicPackage.ARTIST__GENRE, oldGenre, genre));
 	}
 
 	/**
@@ -382,8 +377,6 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 		switch (featureID) {
 			case MusicPackage.ARTIST__COUNTRY:
 				return basicSetCountry(null, msgs);
-			case MusicPackage.ARTIST__GENRE:
-				return basicSetGenre(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -409,7 +402,8 @@ public class ArtistImpl extends EObjectImpl implements Artist {
 			case MusicPackage.ARTIST__COUNTRY:
 				return getCountry();
 			case MusicPackage.ARTIST__GENRE:
-				return getGenre();
+				if (resolve) return getGenre();
+				return basicGetGenre();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

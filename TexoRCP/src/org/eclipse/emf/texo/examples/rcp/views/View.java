@@ -66,7 +66,7 @@ public class View extends ViewPart {
 		name = new Text(grpAlbum, SWT.BORDER);
 		name.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME);
+		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME, true);
 		// NAME -->
 		// <!-- RELEASE DATE
 		Label lblReleaseDate = new Label(grpAlbum, SWT.NONE);
@@ -79,7 +79,7 @@ public class View extends ViewPart {
 				false, 1, 1));
 
 		bf.bind(getClass(), releaseDate, album,
-				MusicPackage.Literals.ALBUM__RELEASE_DATE);
+				MusicPackage.Literals.ALBUM__RELEASE_DATE, false);
 		// RELEASE DATE -->
 
 		// GROUP ARTIST
@@ -95,13 +95,13 @@ public class View extends ViewPart {
 		// works with FeaturePath and without! - last name example will be done
 		// with FeaturePath
 		bf.bind(getClass(), artistFirstName, album.getArtist(),
-				MusicPackage.Literals.ARTIST__FIRST_NAME);
+				MusicPackage.Literals.ARTIST__FIRST_NAME, true);
 
 		Label artistLastName = new Label(grpArtist, SWT.NONE);
 		artistLastName.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true,
 				false, 1, 1));
 		bf.bind(getClass(), artistLastName, album.getArtist(),
-				MusicPackage.Literals.ARTIST__LAST_NAME);
+				MusicPackage.Literals.ARTIST__LAST_NAME, true);
 		// LAST NAME -->
 
 		// <!-- BIRTHDAY
@@ -115,7 +115,7 @@ public class View extends ViewPart {
 		dtBirthday.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
 				false, 1, 1));
 		bf.bind(getClass(), dtBirthday, album.getArtist(),
-				MusicPackage.Literals.ARTIST__BIRTH_DATE);
+				MusicPackage.Literals.ARTIST__BIRTH_DATE, false);
 		// BIRTHDAY -->
 
 		// GROUP COUNTRY
@@ -129,14 +129,14 @@ public class View extends ViewPart {
 		lblCountryFlag.setText("flag");
 
 		bf.bind(getClass(), lblCountryFlag, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__CODE);
+				MusicPackage.Literals.COUNTRY__CODE, false);
 		// COUNTRY CODE -->
 		// <!-- COUNTRY NAME
 		Label lblCountryName = new Label(grpCountry, SWT.NONE);
 		lblCountryName.setText("name");
 
 		bf.bind(getClass(), lblCountryName, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__NAME);
+				MusicPackage.Literals.COUNTRY__NAME, true);
 
 		// COUNTRY NAME -->
 	}

@@ -105,6 +105,7 @@ public class Utils {
 		pop.setName("Pop");
 		pop.setVersion((long) 1);
 		justBeFree.getGenres().add(pop);
+		
 
 		Country ny = MusicFactory.eINSTANCE.createCountry();
 		ny.setName("New York, United States");
@@ -118,7 +119,7 @@ public class Utils {
 		artist.setGenre(pop);
 		artist.setCountry(ny);
 		justBeFree.setArtist(artist);
-
+		
 		return justBeFree;
 	}
 	

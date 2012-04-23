@@ -169,7 +169,7 @@ public interface Album extends EObject {
 	void setReleaseDate(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Genres</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Genres</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.emf.texo.examples.rcp.music.Genre}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -177,10 +177,9 @@ public interface Album extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Genres</em>' containment reference list.
+	 * @return the value of the '<em>Genres</em>' reference list.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getAlbum_Genres()
-	 * @model containment="true"
-	 *        annotation="teneo.jpa value='@ManyToMany'"
+	 * @model annotation="teneo.jpa value='@ManyToMany'"
 	 * @generated
 	 */
 	EList<Genre> getGenres();

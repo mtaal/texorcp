@@ -125,7 +125,7 @@ public interface MusicPackage extends EPackage {
 	int ARTIST__COUNTRY = 5;
 
 	/**
-	 * The feature id for the '<em><b>Genre</b></em>' containment reference.
+	 * The feature id for the '<em><b>Genre</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -198,7 +198,7 @@ public interface MusicPackage extends EPackage {
 	int ALBUM__RELEASE_DATE = 4;
 
 	/**
-	 * The feature id for the '<em><b>Genres</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Genres</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -468,10 +468,10 @@ public interface MusicPackage extends EPackage {
 	EReference getArtist_Country();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getGenre <em>Genre</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getGenre <em>Genre</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Genre</em>'.
+	 * @return the meta object for the reference '<em>Genre</em>'.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Artist#getGenre()
 	 * @see #getArtist()
 	 * @generated
@@ -544,10 +544,10 @@ public interface MusicPackage extends EPackage {
 	EAttribute getAlbum_ReleaseDate();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getGenres <em>Genres</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getGenres <em>Genres</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Genres</em>'.
+	 * @return the meta object for the reference list '<em>Genres</em>'.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Album#getGenres()
 	 * @see #getAlbum()
 	 * @generated
@@ -807,7 +807,7 @@ public interface MusicPackage extends EPackage {
 		EReference ARTIST__COUNTRY = eINSTANCE.getArtist_Country();
 
 		/**
-		 * The meta object literal for the '<em><b>Genre</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Genre</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -865,7 +865,7 @@ public interface MusicPackage extends EPackage {
 		EAttribute ALBUM__RELEASE_DATE = eINSTANCE.getAlbum_ReleaseDate();
 
 		/**
-		 * The meta object literal for the '<em><b>Genres</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Genres</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

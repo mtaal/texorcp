@@ -33,8 +33,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//Country"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="genre" eType="#//Genre"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="genre" eType="#//Genre"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Album">
     <eAnnotations source="elver.org/displayLabel">
@@ -59,7 +58,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="releaseDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genres" upperBound="-1"
-        eType="#//Genre" containment="true">
+        eType="#//Genre">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@ManyToMany"/>
       </eAnnotations>

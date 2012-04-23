@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
@@ -138,7 +139,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	protected Date releaseDate = RELEASE_DATE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getGenres() <em>Genres</em>}' containment reference list.
+	 * The cached value of the '{@link #getGenres() <em>Genres</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getGenres()
@@ -320,7 +321,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 */
 	public EList<Genre> getGenres() {
 		if (genres == null) {
-			genres = new EObjectContainmentEList<Genre>(Genre.class, this, MusicPackage.ALBUM__GENRES);
+			genres = new EObjectResolvingEList<Genre>(Genre.class, this, MusicPackage.ALBUM__GENRES);
 		}
 		return genres;
 	}
@@ -359,8 +360,6 @@ public class AlbumImpl extends EObjectImpl implements Album {
 		switch (featureID) {
 			case MusicPackage.ALBUM__ARTIST:
 				return basicSetArtist(null, msgs);
-			case MusicPackage.ALBUM__GENRES:
-				return ((InternalEList<?>)getGenres()).basicRemove(otherEnd, msgs);
 			case MusicPackage.ALBUM__SONGS:
 				return ((InternalEList<?>)getSongs()).basicRemove(otherEnd, msgs);
 		}
