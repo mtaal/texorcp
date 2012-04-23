@@ -77,28 +77,10 @@ public class Utils {
 	public static final Album getSampleAlbum() {
 		Album justBeFree = MusicFactory.eINSTANCE.createAlbum();
 		justBeFree.setId(1);
-		justBeFree.setName("Just Be Free ");
+		justBeFree.setName("Just Be Free");
 		justBeFree.setReleaseDate(getDate("19.6.2001"));
-		justBeFree.getRatings().add(Rating.HIGH);
-		justBeFree.getRatings().add(Rating.LOW);
-		justBeFree.getRatings().add(Rating.HIGH);
-		justBeFree.getRatings().add(Rating.HIGH);
-		justBeFree.getRatings().add(Rating.LOW);
 		justBeFree.setVersion((long) 1);
 		
-		Artist artist = MusicFactory.eINSTANCE.createArtist();
-		artist.setBirthDate(getDate("19.12.1980"));
-		artist.setFirstName("Christina");
-		artist.setLastName("Aguilera");
-		
-		Genre pop = MusicFactory.eINSTANCE.createGenre();
-		pop.setId(1);
-		pop.setName("Pop");
-		pop.setVersion((long) 1);
-		artist.setGenre(pop);
-		justBeFree.getGenres().add(pop);
-		
-		justBeFree.setArtist(artist);
 		justBeFree.getSongs().add(getSong(1, "Just Be Free", 1));
 		justBeFree.getSongs().add(getSong(2, "By Your Side", 2));
 		justBeFree.getSongs().add(getSong(3, "Move It (Dance Mix)", 3));
@@ -111,12 +93,32 @@ public class Utils {
 		justBeFree.getSongs().add(getSong(10, "Running Out Of Time", 10));
 		justBeFree.getSongs().add(getSong(11, "Believe Me (Dance Mix)", 11));
 		justBeFree.getSongs().add(getSong(12, "Just Be Free (remix) ", 12));
+		
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.LOW);
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.HIGH);
+		justBeFree.getRatings().add(Rating.LOW);
+		
+		Genre pop = MusicFactory.eINSTANCE.createGenre();
+		pop.setId(1);
+		pop.setName("Pop");
+		pop.setVersion((long) 1);
+		justBeFree.getGenres().add(pop);
 
 		Country ny = MusicFactory.eINSTANCE.createCountry();
 		ny.setName("New York, United States");
 		ny.setCode("us");
-		artist.setCountry(ny);
 		
+		Artist artist = MusicFactory.eINSTANCE.createArtist();
+		artist.setBirthDate(getDate("19.12.1980"));
+		artist.setFirstName("Christina");
+		artist.setLastName("Aguilera");
+		artist.setVersion((long) 1);
+		artist.setGenre(pop);
+		artist.setCountry(ny);
+		justBeFree.setArtist(artist);
+
 		return justBeFree;
 	}
 	
@@ -129,7 +131,6 @@ public class Utils {
 		return song;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private static Date getDate(String dateString) {
 		try {
 			return formatter.parse(dateString);

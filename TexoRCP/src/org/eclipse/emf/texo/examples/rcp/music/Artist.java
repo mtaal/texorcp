@@ -167,52 +167,52 @@ public interface Artist extends EObject {
 	void setBirthDate(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Country</b></em>' reference.
+	 * Returns the value of the '<em><b>Country</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Country</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Country</em>' reference.
+	 * @return the value of the '<em>Country</em>' containment reference.
 	 * @see #setCountry(Country)
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getArtist_Country()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	Country getCountry();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Country</em>' reference.
+	 * @param value the new value of the '<em>Country</em>' containment reference.
 	 * @see #getCountry()
 	 * @generated
 	 */
 	void setCountry(Country value);
 
 	/**
-	 * Returns the value of the '<em><b>Genre</b></em>' reference.
+	 * Returns the value of the '<em><b>Genre</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Genre</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Genre</em>' reference.
+	 * @return the value of the '<em>Genre</em>' containment reference.
 	 * @see #setGenre(Genre)
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getArtist_Genre()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	Genre getGenre();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getGenre <em>Genre</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getGenre <em>Genre</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Genre</em>' reference.
+	 * @param value the new value of the '<em>Genre</em>' containment reference.
 	 * @see #getGenre()
 	 * @generated
 	 */

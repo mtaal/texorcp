@@ -117,26 +117,26 @@ public interface Album extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Artist</b></em>' reference.
+	 * Returns the value of the '<em><b>Artist</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Artist</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Artist</em>' reference.
+	 * @return the value of the '<em>Artist</em>' containment reference.
 	 * @see #setArtist(Artist)
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getAlbum_Artist()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	Artist getArtist();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getArtist <em>Artist</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getArtist <em>Artist</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Artist</em>' reference.
+	 * @param value the new value of the '<em>Artist</em>' containment reference.
 	 * @see #getArtist()
 	 * @generated
 	 */
@@ -169,7 +169,7 @@ public interface Album extends EObject {
 	void setReleaseDate(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Genres</b></em>' reference list.
+	 * Returns the value of the '<em><b>Genres</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.texo.examples.rcp.music.Genre}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -177,9 +177,10 @@ public interface Album extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Genres</em>' reference list.
+	 * @return the value of the '<em>Genres</em>' containment reference list.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getAlbum_Genres()
-	 * @model annotation="teneo.jpa value='@ManyToMany'"
+	 * @model containment="true"
+	 *        annotation="teneo.jpa value='@ManyToMany'"
 	 * @generated
 	 */
 	EList<Genre> getGenres();

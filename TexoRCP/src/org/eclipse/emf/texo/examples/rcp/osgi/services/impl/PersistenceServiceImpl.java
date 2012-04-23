@@ -5,16 +5,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.internal.registry.ExtensionMulti;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 
 public class PersistenceServiceImpl implements PersistenceService {
-	private static URI xmlUri = URI.createFileURI(new File("model.xml").getAbsolutePath());
+	private static URI xmlUri = URI.createFileURI(new File("model.xml")
+			.getAbsolutePath());
 	private static Resource resource;
 
 	public PersistenceServiceImpl() {
@@ -23,14 +26,14 @@ public class PersistenceServiceImpl implements PersistenceService {
 	}
 
 	public Boolean isConnected() {
-		return true;
+		return resource != null;
 	}
 
 	@Override
 	public boolean connect() {
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource res = resSet.getResource(xmlUri, false);
-		if (res==null) {
+		if (res == null) {
 			System.out.println("created a new resource");
 			resource = resSet.createResource(xmlUri);
 		} else {
@@ -42,16 +45,18 @@ public class PersistenceServiceImpl implements PersistenceService {
 
 	@Override
 	public boolean disconnect() {
-		return true;
+		resource = null;
+		return resource == null;
 	}
-	
+
 	public void get(String somethign) {
 	}
 
 	public Album load() {
-		System.out.println("trying to load from: "+xmlUri);
+		System.out.println("trying to load from: " + xmlUri);
 		if (isConnected()) {
 			try {
+				resource.getResourceSet().getPackageRegistry().put(MusicPackage.eNS_URI, MusicPackage.eINSTANCE);
 				resource.load(getOptions());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -60,33 +65,38 @@ public class PersistenceServiceImpl implements PersistenceService {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean save(Album album) {
-		System.out.println("trying to save to: "+xmlUri);
-		if (!album.eResource().isModified()){
-			// no saving needed -> succeeded
-			return true; 
+		System.out.println("album==null -> " + (album == null));
+		System.out.println("trying to save to: " + xmlUri);
+		// ARGH?! how does this dirty stuff work!?
+		// if (!album.eResource().isModified()){
+		// // no saving needed -> succeeded
+		// return true;
+		// }
+		// else {
+		System.out.println("resource==null -> " + (resource == null));
+		System.out.println("resource.getContents()==null -> "
+				+ (resource.getContents() == null));
+		resource.getContents().add(album);
+		try {
+			resource.save(getOptions());
+			// return true;
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		else {
-			resource.getContents().add(album);
-			try {
-				resource.save(getOptions());
-//				return true;
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			// print to console
-			try {
-				resource.save(System.out, getOptions());
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		// print to console
+		try {
+			resource.save(System.out, getOptions());
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		// }
 		return false;
 	}
-	
+
 	public static Map<String, Object> getOptions() {
 		Map<String, Object> options = new HashMap<String, Object>();
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
