@@ -1,6 +1,10 @@
 package org.eclipse.emf.texo.examples.rcp.controller;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
@@ -11,16 +15,23 @@ import org.osgi.framework.ServiceReference;
 public class Controller {
 	private static Controller instance;
 	private static Album album;
-	private static PersistenceService service;
+	private Adapter adapter;
+//	private static PersistenceService service;
 
 	public static Controller getInstance() {
 		if (instance == null) {
 			instance = new Controller();
-			service = getPersistenceService();
+//			service = getPersistenceService();
 			connect();
 		}
 		album = Utils.getSampleAlbum();
-
+		album.eAdapters().add(new AdapterImpl() {
+			
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				System.out.println("Controller - model has changed!!!");
+			}
+		});
 		return instance;
 	}
 
@@ -28,30 +39,35 @@ public class Controller {
 		getInstance();
 		// init
 		// Initialize the model
-		MusicPackage.eINSTANCE.eClass();
+//		MusicPackage.eINSTANCE.eClass();
 		//
 		System.out.println("connected");
-		return service.connect();
+//		return service.connect();
+		return true;
 	}
 
 	public static boolean isConnected() {
 		getInstance();
-		return service.isConnected();
+//		return service.isConnected();
+		return true;
 	}
 
 	public static boolean disconnect() {
 		getInstance();
-		return service.disconnect();
+//		return service.disconnect();
+		return true;
 	}
 
 	public static boolean save(Album album) {
 		getInstance();
-		return service.save(album);
+//		return service.save(album);
+		return true;
 	}
 
 	public static Album load() {
 		getInstance();
-		return service.load();
+//		return service.load();
+		return Utils.getSampleAlbum();
 	}
 
 	public static Album getAlbum() {

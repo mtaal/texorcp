@@ -1,11 +1,17 @@
 package org.eclipse.emf.texo.examples.rcp.views;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -28,6 +34,7 @@ public class EditorView extends ViewPart {
 	private DateTime releaseDate;
 	private Text artistFirstName;
 	private Text artistLastName;
+	private Adapter adapter;
 
 	private BindingFactory bf = BindingFactory.getInstance();
 
@@ -36,6 +43,18 @@ public class EditorView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		MusicFactory.eINSTANCE.eClass();
+		adapter = new AdapterImpl() {
+
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				System.out.println("View (1) - model has changed!!!");
+			}
+		};
+		final Album album = Controller.getAlbum();
+		album.eAdapters().add(adapter);
+		
+		
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.horizontalSpacing = 0;
@@ -43,7 +62,6 @@ public class EditorView extends ViewPart {
 		gridLayout.verticalSpacing = 0;
 		parent.setLayout(gridLayout);
 
-		final Album album = Controller.getAlbum();
 
 		Button button1 = new Button(parent, SWT.PUSH);
 		button1.setText("Write model to console");
@@ -124,6 +142,7 @@ public class EditorView extends ViewPart {
 		// with FeaturePath
 		bf.bind(getClass(), artistFirstName, album.getArtist(),
 				MusicPackage.Literals.ARTIST__FIRST_NAME);
+		
 		// FIRST NAME -->
 		// <!-- LAST NAME
 		Label lblLastName = new Label(grpArtist, SWT.NONE);
@@ -184,11 +203,12 @@ public class EditorView extends ViewPart {
 				MusicPackage.Literals.COUNTRY__CODE);
 		// COUNTRY CODE -->
 		// <!-- COUNTRY NAME
-		 Text txtCountryName = new Text(grpCountry, SWT.BORDER);
-		 txtCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
-		 false, 1, 1));
-		 
-		 bf.bind(getClass(), txtCountryName, album.getArtist().getCountry(), MusicPackage.Literals.COUNTRY__NAME);
+		Text txtCountryName = new Text(grpCountry, SWT.BORDER);
+		txtCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+				false, 1, 1));
+
+		bf.bind(getClass(), txtCountryName, album.getArtist().getCountry(),
+				MusicPackage.Literals.COUNTRY__NAME);
 
 		// COUNTRY NAME -->
 	}
@@ -203,6 +223,7 @@ public class EditorView extends ViewPart {
 	}
 
 	public void dispose() {
+		Controller.getAlbum().eAdapters().remove(adapter);
 		bf.dispose(getClass());
 	}
 }

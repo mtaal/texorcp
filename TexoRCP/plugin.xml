@@ -31,12 +31,6 @@
             id="org.eclipse.emf.texo.examples.rcp.views.edutirview"
             name="Editor View">
       </view>
-      <view
-            class="de.vogella.databinding.emf.swt.View"
-            id="de.vogella.databinding.emf.swt.view"
-            name="VogellaView"
-            restorable="true">
-      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -51,13 +45,6 @@
          </view>
          <view
                id="org.eclipse.emf.texo.examples.rcp.views.edutirview"
-               minimized="false"
-               relationship="right"
-               relative="org.eclipse.ui.editorss"
-               standalone="true">
-         </view>
-         <view
-               id="de.vogella.databinding.emf.swt.view"
                minimized="false"
                relationship="right"
                relative="org.eclipse.ui.editorss"
