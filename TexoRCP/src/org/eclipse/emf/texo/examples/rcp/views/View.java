@@ -62,6 +62,11 @@ public class View extends ViewPart {
 		if (album == null) {
 			return;
 		}
+		// add emf adapters
+		album.eAdapters().add(adapter);
+		album.getArtist().eAdapters().add(adapter);
+		album.getArtist().getCountry().eAdapters().add(adapter);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM yyyy");
 		lblAlbumName.setText(String.format("%s (%s)", album.getName(),
 				sdf.format(album.getReleaseDate())));
@@ -131,12 +136,8 @@ public class View extends ViewPart {
 		adapter = new AdapterImpl() {
 
 			public void notifyChanged(Notification notification) {
-				 super.notifyChanged(notification);
+				super.notifyChanged(notification);
 				try {
-					// System.out.println("View (2) - model has changed!!!");
-					// System.out.println(notification.getNotifier().getClass()
-					// .getSimpleName()
-					// + " -> " + notification.getNewValue());
 					if (notification.getNotifier() instanceof Album) {
 						setAlbum((Album) notification.getNotifier());
 					} else if (notification.getNotifier() instanceof Artist) {
@@ -151,114 +152,109 @@ public class View extends ViewPart {
 			}
 		};
 
-		final Album album = Controller.getAlbum();
-		album.eAdapters().add(adapter);
-		album.getArtist().eAdapters().add(adapter);
-		album.getArtist().getCountry().eAdapters().add(adapter);
-
-		// System.out.println("View added eAdapter");
-
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.marginHeight = 0;
 		gridLayout.verticalSpacing = 0;
 		parent.setLayout(gridLayout);
+		{ // GROUP ARTIST
+			Group grpAboutTheArtist = new Group(parent, SWT.NONE);
+			grpAboutTheArtist.setLayout(new GridLayout(2, false));
+			grpAboutTheArtist.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+					true, false, 1, 1));
+			grpAboutTheArtist.setText("about the Artist");
 
-		Group grpAboutTheArtist = new Group(parent, SWT.NONE);
-		grpAboutTheArtist.setLayout(new GridLayout(2, false));
-		grpAboutTheArtist.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-		grpAboutTheArtist.setText("about the Artist");
+			lblFirstname = new Label(grpAboutTheArtist, SWT.RIGHT);
+			lblFirstname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1));
+			lblFirstname.setText("firstName");
 
-		lblFirstname = new Label(grpAboutTheArtist, SWT.RIGHT);
-		lblFirstname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		lblFirstname.setText("firstName");
+			lblLastname = new Label(grpAboutTheArtist, SWT.NONE);
+			lblLastname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1));
+			lblLastname.setText("lastname");
 
-		lblLastname = new Label(grpAboutTheArtist, SWT.NONE);
-		lblLastname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		lblLastname.setText("lastname");
+			Label lblWasBorn = new Label(grpAboutTheArtist, SWT.RIGHT);
+			lblWasBorn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1));
+			lblWasBorn.setText("was born");
 
-		Label lblWasBorn = new Label(grpAboutTheArtist, SWT.RIGHT);
-		lblWasBorn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		lblWasBorn.setText("was born");
+			lblBirthdate = new Label(grpAboutTheArtist, SWT.NONE);
+			lblBirthdate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1));
+			lblBirthdate.setText("birthdate");
 
-		lblBirthdate = new Label(grpAboutTheArtist, SWT.NONE);
-		lblBirthdate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		lblBirthdate.setText("birthdate");
+			lblLivingAt = new Label(grpAboutTheArtist, SWT.CENTER);
+			lblLivingAt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 2, 1));
+			lblLivingAt.setText("living at");
 
-		lblLivingAt = new Label(grpAboutTheArtist, SWT.CENTER);
-		lblLivingAt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 2, 1));
-		lblLivingAt.setText("living at");
+			lblCountryCode = new Label(grpAboutTheArtist, SWT.NONE);
+			lblCountryCode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+					false, false, 1, 1));
+			lblCountryCode.setAlignment(SWT.RIGHT);
+			lblCountryCode.setText("code");
 
-		lblCountryCode = new Label(grpAboutTheArtist, SWT.NONE);
-		lblCountryCode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
-		lblCountryCode.setAlignment(SWT.RIGHT);
-		lblCountryCode.setText("code");
+			lblCountryName = new Label(grpAboutTheArtist, SWT.NONE);
+			lblCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+					true, 1, 1));
+			lblCountryName.setText("countryname");
+		}
+		{ // GROUP ALBUM
+			Group grpAboutTheAlbum = new Group(parent, SWT.NONE);
+			grpAboutTheAlbum.setLayout(new GridLayout(3, false));
+			grpAboutTheAlbum.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+					true, true, 1, 1));
+			grpAboutTheAlbum.setText("about the album");
 
-		lblCountryName = new Label(grpAboutTheArtist, SWT.NONE);
-		lblCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
-				true, 1, 1));
-		lblCountryName.setText("countryname");
+			lblAlbumName = new Label(grpAboutTheAlbum, SWT.CENTER);
+			lblAlbumName.setFont(SWTResourceManager.getFont("Tahoma", 16,
+					SWT.BOLD));
+			lblAlbumName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 3, 1));
+			lblAlbumName.setText("title");
 
-		Group grpAboutTheAlbum = new Group(parent, SWT.NONE);
-		grpAboutTheAlbum.setLayout(new GridLayout(3, false));
-		grpAboutTheAlbum.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
-		grpAboutTheAlbum.setText("about the album");
+			lblGenres = new Label(grpAboutTheAlbum, SWT.CENTER);
+			lblGenres.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 3, 1));
+			lblGenres.setText("New Label");
 
-		lblAlbumName = new Label(grpAboutTheAlbum, SWT.CENTER);
-		lblAlbumName
-				.setFont(SWTResourceManager.getFont("Tahoma", 16, SWT.BOLD));
-		lblAlbumName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 3, 1));
-		lblAlbumName.setText("title");
+			lblRatedHigh = new Label(grpAboutTheAlbum, SWT.RIGHT);
+			GridData gd_lblRatedHigh = new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1);
+			gd_lblRatedHigh.widthHint = 32;
+			gd_lblRatedHigh.heightHint = 16;
+			lblRatedHigh.setLayoutData(gd_lblRatedHigh);
+			lblRatedHigh.setText("rated High");
 
-		lblGenres = new Label(grpAboutTheAlbum, SWT.CENTER);
-		lblGenres.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				3, 1));
-		lblGenres.setText("New Label");
+			lblRatedCount = new Label(grpAboutTheAlbum, SWT.CENTER);
+			GridData gd_lblRatedCount = new GridData(SWT.LEFT, SWT.CENTER,
+					false, false, 1, 1);
+			gd_lblRatedCount.widthHint = 50;
+			lblRatedCount.setLayoutData(gd_lblRatedCount);
+			lblRatedCount.setText("ratedHighCount");
 
-		lblRatedHigh = new Label(grpAboutTheAlbum, SWT.RIGHT);
-		GridData gd_lblRatedHigh = new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1);
-		gd_lblRatedHigh.widthHint = 32;
-		gd_lblRatedHigh.heightHint = 16;
-		lblRatedHigh.setLayoutData(gd_lblRatedHigh);
-		lblRatedHigh.setText("rated High");
+			lblRatedLow = new Label(grpAboutTheAlbum, SWT.NONE);
+			GridData gd_lblRatedLow = new GridData(SWT.FILL, SWT.CENTER, true,
+					false, 1, 1);
+			gd_lblRatedLow.heightHint = 16;
+			lblRatedLow.setLayoutData(gd_lblRatedLow);
+			lblRatedLow.setText("rated Low");
 
-		lblRatedCount = new Label(grpAboutTheAlbum, SWT.CENTER);
-		GridData gd_lblRatedCount = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_lblRatedCount.widthHint = 50;
-		lblRatedCount.setLayoutData(gd_lblRatedCount);
-		lblRatedCount.setText("ratedHighCount");
-
-		lblRatedLow = new Label(grpAboutTheAlbum, SWT.NONE);
-		GridData gd_lblRatedLow = new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1);
-		gd_lblRatedLow.heightHint = 16;
-		lblRatedLow.setLayoutData(gd_lblRatedLow);
-		lblRatedLow.setText("rated Low");
-
-		songList = new List(grpAboutTheAlbum, SWT.BORDER);
-		songList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3,
-				1));
-		// COUNTRY NAME -->
+			songList = new List(grpAboutTheAlbum, SWT.BORDER);
+			songList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+					3, 1));
+			// COUNTRY NAME -->
+		}
 
 		// get an album if there is already one available
 		setAlbum(Controller.getAlbum());
 	}
 
-	// public void setAlbum(Album album) {
-	// ac.setAlbum(album);
-	// }
+	public void update() {
+		setAlbum(Controller.getAlbum());
+	}
 
 	@Override
 	public void setFocus() {

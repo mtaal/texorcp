@@ -58,12 +58,68 @@ public class EditorView extends ViewPart {
 	private TableViewer viewerSongs;
 	private TableViewer viewerGenre;
 	private TableViewer viewerRating;
+	private ComboViewer cCode;
+	private DateTime dtBirthday;
+	private Album album;
+	private Text txtCountryName;
 
 	public EditorView() {
 	}
 
 	public Shell getParentShell() {
 		return parentShell;
+	}
+
+	public void update() {
+		setAlbum(Controller.getAlbum());
+	}
+	
+	private Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(final Album album) {
+		this.album = album;
+		album.eAdapters().add(adapter);
+
+		// binding
+		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME,
+				true);
+		bf.bind(getClass(), releaseDate, album,
+				MusicPackage.Literals.ALBUM__RELEASE_DATE, false);
+
+		// works with FeaturePath and without! - last name example will be done
+		// with FeaturePath
+		bf.bind(getClass(), artistFirstName, album.getArtist(),
+				MusicPackage.Literals.ARTIST__FIRST_NAME, true);
+
+		FeaturePath featureAlbumArtistLastName = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__LAST_NAME);
+		bf.bind(getClass(), artistLastName, album, featureAlbumArtistLastName,
+				true);
+
+		FeaturePath featureAlbumArtistBirthday = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__BIRTH_DATE);
+		bf.bind(getClass(), dtBirthday, album, featureAlbumArtistBirthday,
+				false);
+		bf.bind(getClass(), cCode, album.getArtist().getCountry(),
+				MusicPackage.Literals.COUNTRY__CODE, false);
+		bf.bind(getClass(), txtCountryName, album.getArtist().getCountry(),
+				MusicPackage.Literals.COUNTRY__NAME, true);
+
+		IObservableList ratingData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__RATINGS).observe(album);
+		viewerRating.setInput(ratingData);
+		
+		IObservableList genreData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__GENRES).observe(album);
+		viewerGenre.setInput(genreData);
+		
+		IObservableList songsData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__SONGS).observe(album);
+		viewerSongs.setInput(songsData);
 	}
 
 	@Override
@@ -73,11 +129,8 @@ public class EditorView extends ViewPart {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-//				System.out.println("View (1) - model has changed!!!");
 			}
 		};
-		final Album album = Controller.getAlbum();
-		album.eAdapters().add(adapter);
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -100,8 +153,6 @@ public class EditorView extends ViewPart {
 		name = new Text(grpAlbum, SWT.BORDER);
 		name.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME,
-				true);
 		// NAME -->
 		// <!-- RELEASE DATE
 		Label lblReleaseDate = new Label(grpAlbum, SWT.NONE);
@@ -112,9 +163,6 @@ public class EditorView extends ViewPart {
 		releaseDate = new DateTime(grpAlbum, SWT.BORDER);
 		releaseDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-
-		bf.bind(getClass(), releaseDate, album,
-				MusicPackage.Literals.ALBUM__RELEASE_DATE, false);
 		// RELEASE DATE -->
 
 		// GROUP ARTIST
@@ -133,10 +181,6 @@ public class EditorView extends ViewPart {
 		artistFirstName = new Text(grpArtist, SWT.BORDER);
 		artistFirstName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
-		// works with FeaturePath and without! - last name example will be done
-		// with FeaturePath
-		bf.bind(getClass(), artistFirstName, album.getArtist(),
-				MusicPackage.Literals.ARTIST__FIRST_NAME, true);
 
 		// FIRST NAME -->
 		// <!-- LAST NAME
@@ -148,12 +192,6 @@ public class EditorView extends ViewPart {
 		artistLastName = new Text(grpArtist, SWT.BORDER);
 		artistLastName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
-
-		FeaturePath featureAlbumArtistLastName = FeaturePath.fromList(
-				MusicPackage.Literals.ALBUM__ARTIST,
-				MusicPackage.Literals.ARTIST__LAST_NAME);
-		bf.bind(getClass(), artistLastName, album, featureAlbumArtistLastName,
-				true);
 		// LAST NAME -->
 
 		// <!-- BIRTHDAY
@@ -163,15 +201,9 @@ public class EditorView extends ViewPart {
 				false, 1, 1));
 		lblBirthdate.setText("birthdate");
 
-		DateTime dtBirthday = new DateTime(grpArtist, SWT.BORDER);
+		dtBirthday = new DateTime(grpArtist, SWT.BORDER);
 		dtBirthday.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-
-		FeaturePath featureAlbumArtistBirthday = FeaturePath.fromList(
-				MusicPackage.Literals.ALBUM__ARTIST,
-				MusicPackage.Literals.ARTIST__BIRTH_DATE);
-		bf.bind(getClass(), dtBirthday, album, featureAlbumArtistBirthday,
-				false);
 		// BIRTHDAY -->
 
 		// GROUP COUNTRY
@@ -181,9 +213,7 @@ public class EditorView extends ViewPart {
 				false, 2, 1));
 		grpCountry.setText("country");
 
-		// <!-- COUNTRY CODE
-		ComboViewer cCode = new ComboViewer(grpCountry, SWT.DROP_DOWN
-				| SWT.READ_ONLY);
+		cCode = new ComboViewer(grpCountry, SWT.DROP_DOWN | SWT.READ_ONLY);
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
 				1);
 		gridData.widthHint = 50;
@@ -196,16 +226,9 @@ public class EditorView extends ViewPart {
 		});
 
 		cCode.setInput(Utils.getCountryCodes());
-		bf.bind(getClass(), cCode, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__CODE, false);
-		// COUNTRY CODE -->
-		// <!-- COUNTRY NAME
-		Text txtCountryName = new Text(grpCountry, SWT.BORDER);
+		txtCountryName = new Text(grpCountry, SWT.BORDER);
 		txtCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
-
-		bf.bind(getClass(), txtCountryName, album.getArtist().getCountry(),
-				MusicPackage.Literals.COUNTRY__NAME, true);
 
 		// COUNTRY NAME -->
 
@@ -225,10 +248,6 @@ public class EditorView extends ViewPart {
 		viewerRating.getTable().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		IObservableList ratingData = EMFProperties.list(
-				MusicPackage.Literals.ALBUM__RATINGS).observe(album);
-		viewerRating.setInput(ratingData);
-
 		viewerRating.getTable().addKeyListener(new KeyListener() {
 
 			@SuppressWarnings("unchecked")
@@ -241,7 +260,7 @@ public class EditorView extends ViewPart {
 					for (Iterator<Rating> iterator = structuredSelection
 							.iterator(); iterator.hasNext();) {
 						Rating g = iterator.next();
-						album.getRatings().remove(g);
+						getAlbum().getRatings().remove(g);
 					}
 				}
 			}
@@ -250,7 +269,7 @@ public class EditorView extends ViewPart {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-
+		
 		// btn to add a rating
 		Button btnAddRating = new Button(grpRatings, SWT.NONE);
 		btnAddRating.addSelectionListener(new SelectionAdapter() {
@@ -259,7 +278,7 @@ public class EditorView extends ViewPart {
 				AddRatingDialog d = new AddRatingDialog(getParentShell(),
 						SWT.DIALOG_TRIM);
 				Rating rating = (Rating) d.open();
-				album.getRatings().add(rating);
+				getAlbum().getRatings().add(rating);
 			}
 		});
 		btnAddRating.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
@@ -294,7 +313,7 @@ public class EditorView extends ViewPart {
 					for (Iterator<Genre> iterator = structuredSelection
 							.iterator(); iterator.hasNext();) {
 						Genre g = iterator.next();
-						album.getGenres().remove(g);
+						getAlbum().getGenres().remove(g);
 					}
 				}
 			}
@@ -303,10 +322,6 @@ public class EditorView extends ViewPart {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-
-		IObservableList genreData = EMFProperties.list(
-				MusicPackage.Literals.ALBUM__GENRES).observe(album);
-		viewerGenre.setInput(genreData);
 
 		// btn to add a genre
 		Button btnAddGenre = new Button(grpGenres, SWT.NONE);
@@ -327,8 +342,8 @@ public class EditorView extends ViewPart {
 
 		Group grpSongs = new Group(parent, SWT.NONE);
 		grpSongs.setLayout(new GridLayout(1, false));
-		GridData gd_grpSongs = new GridData(SWT.FILL, SWT.FILL, true, true,
-				2, 1);
+		GridData gd_grpSongs = new GridData(SWT.FILL, SWT.FILL, true, true, 2,
+				1);
 		gd_grpSongs.heightHint = 100;
 		grpSongs.setLayoutData(gd_grpSongs);
 		grpSongs.setText("songs");
@@ -360,10 +375,6 @@ public class EditorView extends ViewPart {
 		viewerSongs.getTable().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		IObservableList songsData = EMFProperties.list(
-				MusicPackage.Literals.ALBUM__SONGS).observe(album);
-		viewerSongs.setInput(songsData);
-
 		// btn to add a song
 
 		Button btnAddSong = new Button(grpSongs, SWT.NONE);
@@ -374,7 +385,7 @@ public class EditorView extends ViewPart {
 						SWT.DIALOG_TRIM);
 				Song song = (Song) s.open();
 				if (s != null) {
-					album.getSongs().add(song);
+					getAlbum().getSongs().add(song);
 				}
 			}
 		});
@@ -392,7 +403,11 @@ public class EditorView extends ViewPart {
 	}
 
 	public void dispose() {
-		Controller.getAlbum().eAdapters().remove(adapter);
+		try {
+			Controller.getAlbum().eAdapters().remove(adapter);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		bf.dispose(getClass());
 	}
 

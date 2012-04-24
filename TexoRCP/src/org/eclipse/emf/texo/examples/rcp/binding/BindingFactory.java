@@ -53,29 +53,23 @@ public class BindingFactory {
 		// this manager collects the new bindings for later cleanup!
 		mgr.runAndCollect(new Runnable() {
 			public void run() {
-				DataBindingContext context = getBindingContext(contextClass);
+				EMFDataBindingContext context = getBindingContext(contextClass);
 				Binding binding = null;
 				if (control instanceof Text) {
-					// if (delayed) {
-					// IWidgetValueProperty textProp = WidgetProperties
-					// .text(SWT.Modify);
-					// IObservableValue uiObs = textProp.observeDelayed(400,
-					// (Text) control);
-					// IObservableValue mObs;
-					//
-					// if (eObject instanceof IObservableValue) {
-					// mObs = textProp
-					// .observeDetail((IObservableValue) eObject);
-					// } else {
-					// mObs = textProp.observe(eObject);
-					// }
-					//
-					// context.bindValue(uiObs, mObs);
-					// } else {
-					binding = context.bindValue(
-							WidgetProperties.text(SWT.Modify).observe(control),
-							EMFProperties.value(featurePath).observe(eObject));
-					// }
+//					if (delayed) {
+//						IWidgetValueProperty text = WidgetProperties
+//								.text(SWT.Modify);
+////						IWidgetValueProperty selection = WidgetProperties.selection();
+//						IObservableValue uiObs = text.observeDelayed(400, (Text) control);
+//						IEMFValueProperty mObs = EMFProperties.value(featurePath);
+//						context.bindValue(uiObs, mObs.observeDetail((IObservableValue) eObject));
+//					} else {
+						binding = context.bindValue(
+								WidgetProperties.text(SWT.Modify).observe(
+										control),
+								EMFProperties.value(featurePath).observe(
+										eObject));
+//					}
 				} else if (control instanceof Label) {
 					binding = context.bindValue(WidgetProperties.text()
 							.observe(control), EMFProperties.value(featurePath)
@@ -143,52 +137,6 @@ public class BindingFactory {
 			return context;
 		}
 	}
-
-	// /**
-	// * get the DataBindingContext for a given class - if it does not exists it
-	// * gets created
-	// *
-	// * @param clazz
-	// * @return
-	// */
-	// public List<EMFDataBindingContext> getBindingProducts(Class<?> clazz) {
-	// if (products.containsKey(clazz)) {
-	// return products.get(clazz);
-	// } else {
-	// List<EMFDataBindingContext> prods = new
-	// ArrayList<EMFDataBindingContext>();
-	// products.put(clazz, prods);
-	// return prods;
-	// }
-	// }
-	//
-	// public void removeBinding(Class<?> contextClass, final Object control,
-	// final EObject eObject, final FeaturePath featurePath) {
-	// final BindingProduct removeMe = new BindingProduct(null, control,
-	// eObject, featurePath);
-	// List<EMFDataBindingContext> prods = products.get(contextClass);
-	// for (int i = 0; i < prods.size(); i++) {
-	// final EMFDataBindingContext check = prods.get(i);
-	// if (check.equals(removeMe)) {
-	// if (DEBUG) {
-	// System.out.println("Match found");
-	// }
-	// check.removeBinding(removeMe.b);
-	// prods.remove(i);
-	// }
-	// }
-	// }
-	//
-	// public int getBindingCount(Class<?> contextClass, Object control) {
-	// int count = 0;
-	// List<BindingProduct> prods = getBindingProducts(contextClass);
-	// for (int i = 0; i < prods.size(); i++) {
-	// if (prods.get(i).getControl().equals(control)) {
-	// count++;
-	// }
-	// }
-	// return count;
-	// }
 
 	/**
 	 * drops all current bindings and creates a new binding context

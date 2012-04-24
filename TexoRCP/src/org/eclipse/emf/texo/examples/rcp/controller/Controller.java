@@ -2,7 +2,6 @@ package org.eclipse.emf.texo.examples.rcp.controller;
 
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
-import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -18,7 +17,7 @@ public class Controller {
 			service = getPersistenceService();
 			connect();
 			// LOADS THE DEFAULT ALBUM
-			album = Utils.getSampleAlbum();
+//			album = Utils.getSampleAlbum();
 		}
 		return instance;
 	}
