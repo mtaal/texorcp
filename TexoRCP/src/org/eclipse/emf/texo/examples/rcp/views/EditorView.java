@@ -3,11 +3,10 @@ package org.eclipse.emf.texo.examples.rcp.views;
 import java.util.Iterator;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddGenreDialog;
@@ -35,6 +34,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
@@ -51,7 +51,7 @@ public class EditorView extends ViewPart {
 	private DateTime releaseDate;
 	private Text artistFirstName;
 	private Text artistLastName;
-	private Adapter adapter;
+	private EContentAdapter adapter;
 	private Shell parentShell;
 
 	private BindingFactory bf = BindingFactory.getInstance();
@@ -71,17 +71,15 @@ public class EditorView extends ViewPart {
 	}
 
 	public void update() {
-		setAlbum(Controller.getAlbum());
+		// setAlbum(Controller.getAlbum());
 	}
-	
+
 	private Album getAlbum() {
 		return album;
 	}
 
 	public void setAlbum(final Album album) {
 		this.album = album;
-		album.eAdapters().add(adapter);
-
 		// binding
 		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME,
 				true);
@@ -112,11 +110,11 @@ public class EditorView extends ViewPart {
 		IObservableList ratingData = EMFProperties.list(
 				MusicPackage.Literals.ALBUM__RATINGS).observe(album);
 		viewerRating.setInput(ratingData);
-		
+
 		IObservableList genreData = EMFProperties.list(
 				MusicPackage.Literals.ALBUM__GENRES).observe(album);
 		viewerGenre.setInput(genreData);
-		
+
 		IObservableList songsData = EMFProperties.list(
 				MusicPackage.Literals.ALBUM__SONGS).observe(album);
 		viewerSongs.setInput(songsData);
@@ -125,12 +123,15 @@ public class EditorView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		this.parentShell = parent.getShell();
-		adapter = new AdapterImpl() {
+		adapter = new EContentAdapter() {
 
 			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
+//				super.notifyChanged(notification);
 			}
 		};
+
+		Controller.getRegisterAdapters().add(adapter);
+		System.out.println("EditorView registered the adapter");
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -151,6 +152,7 @@ public class EditorView extends ViewPart {
 		lblName.setText("name");
 
 		name = new Text(grpAlbum, SWT.BORDER);
+		name.setText("<Album Name>");
 		name.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		// NAME -->
@@ -179,6 +181,7 @@ public class EditorView extends ViewPart {
 		lblFirstName.setText("first name");
 
 		artistFirstName = new Text(grpArtist, SWT.BORDER);
+		artistFirstName.setText("<first name of Artist>");
 		artistFirstName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
 
@@ -190,6 +193,7 @@ public class EditorView extends ViewPart {
 		lblLastName.setText("last name");
 
 		artistLastName = new Text(grpArtist, SWT.BORDER);
+		artistLastName.setText("<last name of artist>");
 		artistLastName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
 		// LAST NAME -->
@@ -214,10 +218,12 @@ public class EditorView extends ViewPart {
 		grpCountry.setText("country");
 
 		cCode = new ComboViewer(grpCountry, SWT.DROP_DOWN | SWT.READ_ONLY);
+		Combo combo = cCode.getCombo();
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
 				1);
 		gridData.widthHint = 50;
 		cCode.getCombo().setLayoutData(gridData);
+		combo.setText("<code>");
 		cCode.setContentProvider(new ArrayContentProvider());
 		cCode.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
@@ -227,6 +233,7 @@ public class EditorView extends ViewPart {
 
 		cCode.setInput(Utils.getCountryCodes());
 		txtCountryName = new Text(grpCountry, SWT.BORDER);
+		txtCountryName.setText("<country name>");
 		txtCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 				false, 1, 1));
 
@@ -269,7 +276,7 @@ public class EditorView extends ViewPart {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-		
+
 		// btn to add a rating
 		Button btnAddRating = new Button(grpRatings, SWT.NONE);
 		btnAddRating.addSelectionListener(new SelectionAdapter() {
@@ -404,7 +411,7 @@ public class EditorView extends ViewPart {
 
 	public void dispose() {
 		try {
-			Controller.getAlbum().eAdapters().remove(adapter);
+			Controller.getRegisterAdapters().remove(adapter);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

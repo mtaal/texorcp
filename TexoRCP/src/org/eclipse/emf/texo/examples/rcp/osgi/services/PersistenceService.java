@@ -1,6 +1,7 @@
 package org.eclipse.emf.texo.examples.rcp.osgi.services;
 
-import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * IMPORTANT:<br>
@@ -8,8 +9,9 @@ import org.eclipse.emf.texo.examples.rcp.music.Album;
  * Service-Component: OSGI-INF/PersistenceService.xml<br>
  * Bundle-ActivationPolicy: lazy<br>
  * is in your MANIFEST.MF
+ * 
  * @author lumo
- *
+ * 
  */
 public interface PersistenceService {
 
@@ -19,7 +21,7 @@ public interface PersistenceService {
 
 	public Boolean isConnected();
 
-	public boolean save(Album album);
+	public boolean save(EList<EObject> data);
 
-	public Album load();
+	public EList<EObject> load();
 }

@@ -1,15 +1,22 @@
 package org.eclipse.emf.texo.examples.rcp.controller;
 
-import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-public class Controller {
+public class Controller extends ResourceImpl {
 	private static Controller instance;
-	private static Album album;
 	private static PersistenceService service;
+
+	public static EList<Adapter> getRegisterAdapters() {
+		return getInstance().eAdapters();
+		// return getInstance().getAlbumList().eAdapters();
+	}
 
 	public static Controller getInstance() {
 		if (instance == null) {
@@ -17,14 +24,14 @@ public class Controller {
 			service = getPersistenceService();
 			connect();
 			// LOADS THE DEFAULT ALBUM
-//			album = Utils.getSampleAlbum();
+			// album = Utils.getSampleAlbum();
 		}
 		return instance;
 	}
 
 	public static boolean connect() {
 		getInstance();
-//		System.out.println("connected");
+		// System.out.println("connected");
 		return service.connect();
 	}
 
@@ -38,24 +45,14 @@ public class Controller {
 		return service.disconnect();
 	}
 
-	public static boolean save(Album album) {
+	public static boolean save(EList<EObject> data) {
 		getInstance();
-		return service.save(album);
+		return service.save(data);
 	}
 
-	public static Album load() {
+	public static EList<EObject> load() {
 		getInstance();
 		return service.load();
-	}
-
-	public static Album getAlbum() {
-		getInstance();
-		return album;
-	}
-
-	public static void setAlbum(Album newAlbum) {
-		getInstance();
-		album = newAlbum;
 	}
 
 	public static PersistenceService getPersistenceService() {

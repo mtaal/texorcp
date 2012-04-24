@@ -12,7 +12,7 @@ public class Save extends AbstractHandler {
 		if (!Controller.isConnected()) {
 			Controller.connect();
 		}
-		Controller.save(Controller.getAlbum());
+		Controller.save(Controller.getInstance().getContents());
 		return null;
 	}
 }

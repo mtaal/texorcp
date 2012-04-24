@@ -28,29 +28,14 @@
       </view>
       <view
             class="org.eclipse.emf.texo.examples.rcp.views.EditorView"
-            id="org.eclipse.emf.texo.examples.rcp.views.edutirview"
+            id="org.eclipse.emf.texo.examples.rcp.views.editorview"
             name="Editor View">
       </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="*">
-         <view
-               standalone="true"
-               minimized="false"
-               relative="org.eclipse.ui.editorss"
-               relationship="left"
-               id="org.eclipse.emf.texo.examples.rcp.views.view">
-         </view>
-         <view
-               id="org.eclipse.emf.texo.examples.rcp.views.edutirview"
-               minimized="false"
-               relationship="right"
-               relative="org.eclipse.ui.editorss"
-               standalone="true">
-         </view>
-      </perspectiveExtension>
+      <view
+            class="org.eclipse.emf.texo.examples.rcp.views.ListViewPart"
+            id="org.eclipse.emf.texo.examples.rcp.views.ListViewPart"
+            name="Available Albums">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

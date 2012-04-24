@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 
@@ -33,10 +34,10 @@ public class PersistenceServiceImpl implements PersistenceService {
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource res = resSet.getResource(xmlUri, false);
 		if (res == null) {
-//			System.out.println("created a new resource");
+			// System.out.println("created a new resource");
 			resource = resSet.createResource(xmlUri);
 		} else {
-//			System.out.println("using existing resource");
+			// System.out.println("using existing resource");
 			resource = res;
 		}
 		return true;
@@ -51,26 +52,27 @@ public class PersistenceServiceImpl implements PersistenceService {
 	public void get(String somethign) {
 	}
 
-	public Album load() {
+	public EList<EObject> load() {
 		System.out.println("trying to load from: " + xmlUri);
 		if (isConnected()) {
 			try {
-				resource.getResourceSet().getPackageRegistry().put(MusicPackage.eNS_URI, MusicPackage.eINSTANCE);
+				resource.getResourceSet().getPackageRegistry()
+						.put(MusicPackage.eNS_URI, MusicPackage.eINSTANCE);
 				resource.load(getOptions());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (Album) resource.getContents().get(0);
+			return resource.getContents();
 		}
 		return null;
 	}
 
 	@Override
-	public boolean save(Album album) {
+	public boolean save(EList<EObject> data) {
 		System.out.println("resource==null -> " + (resource == null));
 		System.out.println("resource.getContents()==null -> "
 				+ (resource.getContents() == null));
-		resource.getContents().add(album);
+		resource.getContents().addAll(data);
 		try {
 			resource.save(getOptions());
 			// return true;

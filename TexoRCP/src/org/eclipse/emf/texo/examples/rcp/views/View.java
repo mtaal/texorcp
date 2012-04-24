@@ -4,10 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
@@ -30,7 +29,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public class View extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
-	private Adapter adapter;
+	private EContentAdapter adapter;
 
 	private BindingFactory bf = BindingFactory.getInstance();
 	private Label lblFirstname;
@@ -62,11 +61,6 @@ public class View extends ViewPart {
 		if (album == null) {
 			return;
 		}
-		// add emf adapters
-		album.eAdapters().add(adapter);
-		album.getArtist().eAdapters().add(adapter);
-		album.getArtist().getCountry().eAdapters().add(adapter);
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM yyyy");
 		lblAlbumName.setText(String.format("%s (%s)", album.getName(),
 				sdf.format(album.getReleaseDate())));
@@ -133,24 +127,27 @@ public class View extends ViewPart {
 
 		// register the eAdapter
 		MusicFactory.eINSTANCE.eClass();
-		adapter = new AdapterImpl() {
+		adapter = new EContentAdapter() {
 
 			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
-				try {
-					if (notification.getNotifier() instanceof Album) {
-						setAlbum((Album) notification.getNotifier());
-					} else if (notification.getNotifier() instanceof Artist) {
-						setArtist((Artist) notification.getNotifier());
-					} else if (notification.getNotifier() instanceof Country) {
-						setCountry((Country) notification.getNotifier());
-					}
-				} catch (Exception ignoreMe) {
-					// this raises when we close the application, because emf
-					// wants to update but the widgets are already disposed
-				}
+//				super.notifyChanged(notification);
+//				try {
+//					if (notification.getNotifier() instanceof Album) {
+//						setAlbum((Album) notification.getNotifier());
+//					} else if (notification.getNotifier() instanceof Artist) {
+//						setArtist((Artist) notification.getNotifier());
+//					} else if (notification.getNotifier() instanceof Country) {
+//						setCountry((Country) notification.getNotifier());
+//					}
+//				} catch (Exception ignoreMe) {
+//					// this raises when we close the application, because emf
+//					// wants to update but the widgets are already disposed
+//				}
 			}
 		};
+		
+		Controller.getRegisterAdapters().add(adapter);
+		System.out.println("RepresentativeView registered the adapter");
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -168,12 +165,12 @@ public class View extends ViewPart {
 			lblFirstname = new Label(grpAboutTheArtist, SWT.RIGHT);
 			lblFirstname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 					false, 1, 1));
-			lblFirstname.setText("firstName");
+			lblFirstname.setText("<first name of Artist>");
 
 			lblLastname = new Label(grpAboutTheArtist, SWT.NONE);
 			lblLastname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 					false, 1, 1));
-			lblLastname.setText("lastname");
+			lblLastname.setText("<last name of artist>");
 
 			Label lblWasBorn = new Label(grpAboutTheArtist, SWT.RIGHT);
 			lblWasBorn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -183,7 +180,7 @@ public class View extends ViewPart {
 			lblBirthdate = new Label(grpAboutTheArtist, SWT.NONE);
 			lblBirthdate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 					false, 1, 1));
-			lblBirthdate.setText("birthdate");
+			lblBirthdate.setText("<birthdate of artist>");
 
 			lblLivingAt = new Label(grpAboutTheArtist, SWT.CENTER);
 			lblLivingAt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -194,12 +191,12 @@ public class View extends ViewPart {
 			lblCountryCode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 					false, false, 1, 1));
 			lblCountryCode.setAlignment(SWT.RIGHT);
-			lblCountryCode.setText("code");
+			lblCountryCode.setText("<country code>");
 
 			lblCountryName = new Label(grpAboutTheArtist, SWT.NONE);
 			lblCountryName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
 					true, 1, 1));
-			lblCountryName.setText("countryname");
+			lblCountryName.setText("<country name>");
 		}
 		{ // GROUP ALBUM
 			Group grpAboutTheAlbum = new Group(parent, SWT.NONE);
@@ -213,12 +210,12 @@ public class View extends ViewPart {
 					SWT.BOLD));
 			lblAlbumName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 					false, 3, 1));
-			lblAlbumName.setText("title");
+			lblAlbumName.setText("<album title>");
 
 			lblGenres = new Label(grpAboutTheAlbum, SWT.CENTER);
 			lblGenres.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 					false, 3, 1));
-			lblGenres.setText("New Label");
+			lblGenres.setText("<genres>");
 
 			lblRatedHigh = new Label(grpAboutTheAlbum, SWT.RIGHT);
 			GridData gd_lblRatedHigh = new GridData(SWT.FILL, SWT.CENTER, true,
@@ -233,7 +230,7 @@ public class View extends ViewPart {
 					false, false, 1, 1);
 			gd_lblRatedCount.widthHint = 50;
 			lblRatedCount.setLayoutData(gd_lblRatedCount);
-			lblRatedCount.setText("ratedHighCount");
+			lblRatedCount.setText("<ratings>");
 
 			lblRatedLow = new Label(grpAboutTheAlbum, SWT.NONE);
 			GridData gd_lblRatedLow = new GridData(SWT.FILL, SWT.CENTER, true,
@@ -249,11 +246,11 @@ public class View extends ViewPart {
 		}
 
 		// get an album if there is already one available
-		setAlbum(Controller.getAlbum());
+//		setAlbum(Controller.getInstance().get);
 	}
 
 	public void update() {
-		setAlbum(Controller.getAlbum());
+//		setAlbum(Controller.getAlbum());
 	}
 
 	@Override
@@ -262,7 +259,7 @@ public class View extends ViewPart {
 	}
 
 	public void dispose() {
-		Controller.getAlbum().eAdapters().remove(adapter);
+		Controller.getRegisterAdapters().remove(adapter);
 		bf.dispose(getClass());
 	}
 }
