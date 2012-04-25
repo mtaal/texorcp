@@ -8,11 +8,13 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.databinding.swt.IWidgetValueProperty;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
@@ -85,9 +87,10 @@ public class BindingFactory {
 			Integer delay, IConverter string2ClassConverter,
 			IConverter class2StringConverter) {
 
-		if (delay == null || delay < 0) {
+		if (delay != null && delay < 0) {
 			delay = 300;
 		}
+		final Integer delayed = delay;
 		final UpdateValueStrategy string2ClassStrategy;
 		final UpdateValueStrategy class2Stringstrategy;
 
@@ -111,23 +114,26 @@ public class BindingFactory {
 				EMFDataBindingContext context = getBindingContext(contextClass);
 				Binding binding = null;
 				if (control instanceof Text) {
-					// if (delayed) {
-					// IWidgetValueProperty text = WidgetProperties
-					// .text(SWT.Modify);
-					// // IWidgetValueProperty selection =
-					// WidgetProperties.selection();
-					// IObservableValue uiObs = text.observeDelayed(400, (Text)
-					// control);
-					// IEMFValueProperty mObs =
-					// EMFProperties.value(featurePath);
-					// context.bindValue(uiObs,
-					// mObs.observeDetail((IObservableValue) eObject));
-					// } else {
-					binding = context.bindValue(
-							WidgetProperties.text(SWT.Modify).observe(control),
-							EMFProperties.value(featurePath).observe(eObject),
-							string2ClassStrategy, class2Stringstrategy);
-					// }
+					if (delayed != null) {
+						// property to observe on control
+						IWidgetValueProperty textProp = WidgetProperties
+								.text(SWT.Modify);
+						// property of control to observe with delay
+						IObservableValue uiObs = textProp.observeDelayed(400,
+								(Text) control);
+						// data object to observe
+						IObservableValue mObs;
+						mObs = EMFProperties.value(featurePath)
+								.observe(eObject);
+						context.bindValue(uiObs, mObs);
+					} else {
+						binding = context.bindValue(
+								WidgetProperties.text(SWT.Modify).observe(
+										control),
+								EMFProperties.value(featurePath).observe(
+										eObject), string2ClassStrategy,
+								class2Stringstrategy);
+					}
 				} else if (control instanceof Label) {
 					binding = context.bindValue(WidgetProperties.text()
 							.observe(control), EMFProperties.value(featurePath)
