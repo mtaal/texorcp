@@ -143,6 +143,7 @@ public class View extends ViewPart {
 			this.album = album;
 			this.album.eAdapters().add(adapter);
 			this.album.getArtist().eAdapters().add(adapter);
+			this.album.getArtist().getCountry().eAdapters().add(adapter);
 		}
 	}
 
@@ -248,6 +249,7 @@ public class View extends ViewPart {
 					Country c = (Country) notification.getNotifier();
 					switch (notification.getFeatureID(Country.class)) {
 					case MusicPackage.COUNTRY__CODE:
+						System.out.println("setting country code");
 						setCountryCode(c);
 						break;
 					case MusicPackage.COUNTRY__NAME:
