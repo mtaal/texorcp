@@ -167,26 +167,26 @@ public interface Artist extends EObject {
 	void setBirthDate(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Country</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Country</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Country</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Country</em>' containment reference.
+	 * @return the value of the '<em>Country</em>' reference.
 	 * @see #setCountry(Country)
 	 * @see org.eclipse.emf.texo.examples.rcp.music.MusicPackage#getArtist_Country()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	Country getCountry();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Country</em>' containment reference.
+	 * @param value the new value of the '<em>Country</em>' reference.
 	 * @see #getCountry()
 	 * @generated
 	 */

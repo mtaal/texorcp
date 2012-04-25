@@ -31,8 +31,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//Country"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//Country"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genre" eType="#//Genre"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Album">
@@ -54,8 +53,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="artist" eType="#//Artist"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artist" eType="#//Artist"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="releaseDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genres" upperBound="-1"
         eType="#//Genre">
@@ -64,7 +62,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="songs" upperBound="-1"
-        eType="#//Song" containment="true">
+        eType="#//Song">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@OneToMany"/>
       </eAnnotations>

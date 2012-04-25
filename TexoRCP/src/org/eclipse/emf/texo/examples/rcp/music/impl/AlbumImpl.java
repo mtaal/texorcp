@@ -109,7 +109,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getArtist() <em>Artist</em>}' containment reference.
+	 * The cached value of the '{@link #getArtist() <em>Artist</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getArtist()
@@ -149,7 +149,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	protected EList<Genre> genres;
 
 	/**
-	 * The cached value of the '{@link #getSongs() <em>Songs</em>}' containment reference list.
+	 * The cached value of the '{@link #getSongs() <em>Songs</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getSongs()
@@ -256,6 +256,14 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 * @generated
 	 */
 	public Artist getArtist() {
+		if (artist != null && artist.eIsProxy()) {
+			InternalEObject oldArtist = (InternalEObject)artist;
+			artist = (Artist)eResolveProxy(oldArtist);
+			if (artist != oldArtist) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MusicPackage.ALBUM__ARTIST, oldArtist, artist));
+			}
+		}
 		return artist;
 	}
 
@@ -264,14 +272,8 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetArtist(Artist newArtist, NotificationChain msgs) {
-		Artist oldArtist = artist;
-		artist = newArtist;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MusicPackage.ALBUM__ARTIST, oldArtist, newArtist);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public Artist basicGetArtist() {
+		return artist;
 	}
 
 	/**
@@ -280,17 +282,10 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 * @generated
 	 */
 	public void setArtist(Artist newArtist) {
-		if (newArtist != artist) {
-			NotificationChain msgs = null;
-			if (artist != null)
-				msgs = ((InternalEObject)artist).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MusicPackage.ALBUM__ARTIST, null, msgs);
-			if (newArtist != null)
-				msgs = ((InternalEObject)newArtist).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MusicPackage.ALBUM__ARTIST, null, msgs);
-			msgs = basicSetArtist(newArtist, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MusicPackage.ALBUM__ARTIST, newArtist, newArtist));
+		Artist oldArtist = artist;
+		artist = newArtist;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MusicPackage.ALBUM__ARTIST, oldArtist, artist));
 	}
 
 	/**
@@ -333,7 +328,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 */
 	public EList<Song> getSongs() {
 		if (songs == null) {
-			songs = new EObjectContainmentEList<Song>(Song.class, this, MusicPackage.ALBUM__SONGS);
+			songs = new EObjectResolvingEList<Song>(Song.class, this, MusicPackage.ALBUM__SONGS);
 		}
 		return songs;
 	}
@@ -356,22 +351,6 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case MusicPackage.ALBUM__ARTIST:
-				return basicSetArtist(null, msgs);
-			case MusicPackage.ALBUM__SONGS:
-				return ((InternalEList<?>)getSongs()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MusicPackage.ALBUM__ID:
@@ -381,7 +360,8 @@ public class AlbumImpl extends EObjectImpl implements Album {
 			case MusicPackage.ALBUM__NAME:
 				return getName();
 			case MusicPackage.ALBUM__ARTIST:
-				return getArtist();
+				if (resolve) return getArtist();
+				return basicGetArtist();
 			case MusicPackage.ALBUM__RELEASE_DATE:
 				return getReleaseDate();
 			case MusicPackage.ALBUM__GENRES:

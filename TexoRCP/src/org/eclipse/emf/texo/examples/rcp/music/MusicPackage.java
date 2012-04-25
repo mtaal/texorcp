@@ -116,7 +116,7 @@ public interface MusicPackage extends EPackage {
 	int ARTIST__BIRTH_DATE = 4;
 
 	/**
-	 * The feature id for the '<em><b>Country</b></em>' containment reference.
+	 * The feature id for the '<em><b>Country</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -180,7 +180,7 @@ public interface MusicPackage extends EPackage {
 	int ALBUM__NAME = 2;
 
 	/**
-	 * The feature id for the '<em><b>Artist</b></em>' containment reference.
+	 * The feature id for the '<em><b>Artist</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -207,7 +207,7 @@ public interface MusicPackage extends EPackage {
 	int ALBUM__GENRES = 5;
 
 	/**
-	 * The feature id for the '<em><b>Songs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Songs</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -494,10 +494,10 @@ public interface MusicPackage extends EPackage {
 	EAttribute getArtist_BirthDate();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry <em>Country</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Country</em>'.
+	 * @return the meta object for the reference '<em>Country</em>'.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Artist#getCountry()
 	 * @see #getArtist()
 	 * @generated
@@ -559,10 +559,10 @@ public interface MusicPackage extends EPackage {
 	EAttribute getAlbum_Name();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getArtist <em>Artist</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getArtist <em>Artist</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Artist</em>'.
+	 * @return the meta object for the reference '<em>Artist</em>'.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Album#getArtist()
 	 * @see #getAlbum()
 	 * @generated
@@ -592,10 +592,10 @@ public interface MusicPackage extends EPackage {
 	EReference getAlbum_Genres();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getSongs <em>Songs</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipse.emf.texo.examples.rcp.music.Album#getSongs <em>Songs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Songs</em>'.
+	 * @return the meta object for the reference list '<em>Songs</em>'.
 	 * @see org.eclipse.emf.texo.examples.rcp.music.Album#getSongs()
 	 * @see #getAlbum()
 	 * @generated
@@ -868,7 +868,7 @@ public interface MusicPackage extends EPackage {
 		EAttribute ARTIST__BIRTH_DATE = eINSTANCE.getArtist_BirthDate();
 
 		/**
-		 * The meta object literal for the '<em><b>Country</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Country</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -918,7 +918,7 @@ public interface MusicPackage extends EPackage {
 		EAttribute ALBUM__NAME = eINSTANCE.getAlbum_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Artist</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Artist</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -942,7 +942,7 @@ public interface MusicPackage extends EPackage {
 		EReference ALBUM__GENRES = eINSTANCE.getAlbum_Genres();
 
 		/**
-		 * The meta object literal for the '<em><b>Songs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Songs</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
