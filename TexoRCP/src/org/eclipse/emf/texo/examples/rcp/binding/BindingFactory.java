@@ -6,6 +6,8 @@ import java.util.Map;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -41,14 +43,67 @@ public class BindingFactory {
 	 *            the feature instance the property is created for
 	 */
 	public void bind(Class<?> contextClass, Object control,
-			final EObject eObject, EStructuralFeature feature, boolean delayed) {
+			final EObject eObject, EStructuralFeature feature) {
+		bind(contextClass, control, eObject, feature, null);
+	}
+
+	public void bind(Class<?> contextClass, Object control,
+			final EObject eObject, EStructuralFeature feature, Integer delay) {
 		bind(contextClass, control, eObject, FeaturePath.fromList(feature),
-				delayed);
+				delay, null, null);
+	}
+
+	public void bind(final Class<?> contextClass, final Object control,
+			final EObject eObject, final FeaturePath featurePath) {
+		bind(contextClass, control, eObject, featurePath, null, null, null);
+	}
+
+	public void bind(final Class<?> contextClass, final Object control,
+			final EObject eObject, final FeaturePath featurePath, Integer delay) {
+		bind(contextClass, control, eObject, featurePath, delay, null, null);
+	}
+
+	/**
+	 * one way conversion for Labels
+	 * 
+	 * @param contextClass
+	 * @param control
+	 * @param eObject
+	 * @param featurePath
+	 * @param delay
+	 * @param class2StringConverter
+	 */
+	public void bind(final Class<?> contextClass, final Object control,
+			final EObject eObject, final FeaturePath featurePath,
+			Integer delay, IConverter class2StringConverter) {
+		bind(contextClass, control, eObject, featurePath, delay, null,
+				class2StringConverter);
 	}
 
 	public void bind(final Class<?> contextClass, final Object control,
 			final EObject eObject, final FeaturePath featurePath,
-			final boolean delayed) {
+			Integer delay, IConverter string2ClassConverter,
+			IConverter class2StringConverter) {
+
+		if (delay == null || delay < 0) {
+			delay = 300;
+		}
+		final UpdateValueStrategy string2ClassStrategy;
+		final UpdateValueStrategy class2Stringstrategy;
+
+		if (class2StringConverter != null) {
+			class2Stringstrategy = new UpdateValueStrategy();
+			class2Stringstrategy.setConverter(class2StringConverter);
+		} else {
+			class2Stringstrategy = null;
+		}
+
+		if (string2ClassConverter != null) {
+			string2ClassStrategy = new UpdateValueStrategy();
+			string2ClassStrategy.setConverter(string2ClassConverter);
+		} else {
+			string2ClassStrategy = null;
+		}
 
 		// this manager collects the new bindings for later cleanup!
 		mgr.runAndCollect(new Runnable() {
@@ -56,20 +111,23 @@ public class BindingFactory {
 				EMFDataBindingContext context = getBindingContext(contextClass);
 				Binding binding = null;
 				if (control instanceof Text) {
-//					if (delayed) {
-//						IWidgetValueProperty text = WidgetProperties
-//								.text(SWT.Modify);
-////						IWidgetValueProperty selection = WidgetProperties.selection();
-//						IObservableValue uiObs = text.observeDelayed(400, (Text) control);
-//						IEMFValueProperty mObs = EMFProperties.value(featurePath);
-//						context.bindValue(uiObs, mObs.observeDetail((IObservableValue) eObject));
-//					} else {
-						binding = context.bindValue(
-								WidgetProperties.text(SWT.Modify).observe(
-										control),
-								EMFProperties.value(featurePath).observe(
-										eObject));
-//					}
+					// if (delayed) {
+					// IWidgetValueProperty text = WidgetProperties
+					// .text(SWT.Modify);
+					// // IWidgetValueProperty selection =
+					// WidgetProperties.selection();
+					// IObservableValue uiObs = text.observeDelayed(400, (Text)
+					// control);
+					// IEMFValueProperty mObs =
+					// EMFProperties.value(featurePath);
+					// context.bindValue(uiObs,
+					// mObs.observeDetail((IObservableValue) eObject));
+					// } else {
+					binding = context.bindValue(
+							WidgetProperties.text(SWT.Modify).observe(control),
+							EMFProperties.value(featurePath).observe(eObject),
+							string2ClassStrategy, class2Stringstrategy);
+					// }
 				} else if (control instanceof Label) {
 					binding = context.bindValue(WidgetProperties.text()
 							.observe(control), EMFProperties.value(featurePath)

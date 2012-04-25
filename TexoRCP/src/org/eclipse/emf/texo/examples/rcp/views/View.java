@@ -6,18 +6,18 @@ import java.util.Arrays;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
-import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
-import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
+import org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -31,6 +31,9 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public class View extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
+	private static final SimpleDateFormat sdf = new SimpleDateFormat(
+			"MMMMM yyyy");
+
 	private EContentAdapter adapter;
 	private Album album;
 
@@ -51,31 +54,23 @@ public class View extends ViewPart {
 	public View() {
 	}
 
-	public void setCountry(Country country) {
-		if (country == null) {
-			return;
-		}
-		lblCountryCode.setImage(Utils.getImage(Utils.getCountryCodeFlag(country
-				.getCode())));
-		lblCountryName.setText(country.getName());
+	public void setAlbumDetails(Album a) {
+		lblAlbumName.setText(String.format("%s (%s)", a.getName(),
+				sdf.format(a.getReleaseDate())));
 	}
 
-	public void setAlbum(Album album) {
-		if (album == null) {
-			return;
-		}
-		if (this.album != null) {
-			this.album.eAdapters().remove(adapter);
-		}
-		this.album = album;
-		this.album.eAdapters().add(adapter);
+	public void setArtist(Artist a) {
+		lblFirstname.setText(a.getFirstName());
+		lblLastname.setText(a.getLastName());
+		lblBirthdate.setText(DateFormat.getDateInstance(DateFormat.LONG)
+				.format(a.getBirthDate()));
+		// country
+		lblCountryCode.setImage(Utils.getImage(Utils.getCountryCodeFlag(a
+				.getCountry().getCode())));
+		lblCountryName.setText(a.getCountry().getName());
+	}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM yyyy");
-		lblAlbumName.setText(String.format("%s (%s)", album.getName(),
-				sdf.format(album.getReleaseDate())));
-
-		setArtist(album.getArtist());
-		EList<Genre> genres = album.getGenres();
+	public void setGenres(EList<Genre> genres) {
 		if (genres != null) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < genres.size(); i++) {
@@ -86,8 +81,9 @@ public class View extends ViewPart {
 			}
 			lblGenres.setText(sb.toString());
 		}
+	}
 
-		EList<Rating> ratings = album.getRatings();
+	public void setRatings(EList<Rating> ratings) {
 		if (ratings != null) {
 			int highCount = 0;
 			for (int i = 0; i < ratings.size(); i++) {
@@ -100,8 +96,9 @@ public class View extends ViewPart {
 					ratings.size() - highCount));
 			lblRatedLow.setImage(Utils.getImage(Utils.getRating(Rating.LOW)));
 		}
+	}
 
-		EList<Song> songs = album.getSongs();
+	public void setSongs(EList<Song> songs) {
 		if (songs != null) {
 			String[] titles = new String[songs.size()];
 
@@ -120,37 +117,80 @@ public class View extends ViewPart {
 		}
 	}
 
-	public void setArtist(Artist artist) {
-		if (artist == null) {
+	public void updateAdapter(Album album) {
+		if (album == null) {
 			return;
 		}
-		lblFirstname.setText(artist.getFirstName());
-		lblLastname.setText(artist.getLastName());
-		lblBirthdate.setText(DateFormat.getDateInstance(DateFormat.LONG)
-				.format(artist.getBirthDate()));
-		setCountry(artist.getCountry());
+		// check if its a new album
+		if (this.album != album) {
+			System.out.println("View got a new album " + album);
+			if (this.album != null) {
+				this.album.eAdapters().remove(adapter);
+			}
+			this.album = album;
+			this.album.eAdapters().add(adapter);
+		}
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-
-		// register the eAdapter
-		MusicFactory.eINSTANCE.eClass();
 		adapter = new EContentAdapter() {
-
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
 				if (notification.getNotifier() instanceof Album) {
-					// update the list too..
-					System.out.println("updating...");
-					setAlbum((Album) notification.getNotifier());
+					System.out.println("updating Album... ATTRIBUTE "
+							+ ((EStructuralFeature) notification.getFeature())
+									.getName());
+					Album a = (Album) notification.getNotifier();
+					updateAdapter(a); // create new adapter
+					switch (notification.getFeatureID(Album.class)) {
+					case MusicPackage.ALBUM__NAME:
+						setAlbumDetails(a);
+						break;
+					case MusicPackage.ALBUM__RELEASE_DATE:
+						setAlbumDetails(a);
+						break;
+
+					case MusicPackage.ALBUM__ARTIST:
+						setArtist(a.getArtist());
+						break;
+
+					case MusicPackage.ALBUM__GENRES:
+						setGenres(a.getGenres());
+						break;
+
+					case MusicPackage.ALBUM__RATINGS:
+						setRatings(a.getRatings());
+						break;
+
+					case MusicPackage.ALBUM__SONGS:
+						setSongs(a.getSongs());
+						break;
+
+					default:
+						System.out.println("Album Feature ID not handled yet: "
+								+ notification.getFeatureID(Album.class));
+						break;
+					}
 					return;
 				}
 				if (notification.getNotifier() instanceof AlbumDataBase) {
 					switch (notification.getFeatureID(AlbumDataBase.class)) {
 					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
-						setAlbum(((AlbumDataBase) notification.getNotifier())
-								.getSelected());
+						System.out.println("AlbumDatabase.select()");
+						AlbumDataBaseImpl adb = (AlbumDataBaseImpl) notification
+								.getNotifier();
+						Album a = adb.getSelected();
+						updateAdapter(a);
+						// complete update
+						setAlbumDetails(a);
+						setAlbumDetails(a);
+						setAlbumDetails(a);
+						setArtist(a.getArtist());
+						setGenres(a.getGenres());
+						setRatings(a.getRatings());
+						setSongs(a.getSongs());
+						System.out.println("updated.view!");
 						break;
 
 					default:
@@ -159,9 +199,8 @@ public class View extends ViewPart {
 				}
 			}
 		};
-
+		// register the eAdapter
 		Controller.getRegisterAdapters().add(adapter);
-		System.out.println("RepresentativeView registered the adapter");
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -266,7 +305,14 @@ public class View extends ViewPart {
 	}
 
 	public void dispose() {
-		Controller.getRegisterAdapters().remove(adapter);
+		try {
+			Controller.getRegisterAdapters().remove(adapter);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		if (album != null) {
+			album.eAdapters().remove(adapter);
+		}
 		bf.dispose(getClass());
 	}
 }
