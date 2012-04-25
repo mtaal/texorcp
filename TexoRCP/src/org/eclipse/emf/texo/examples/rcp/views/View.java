@@ -13,6 +13,7 @@ import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
@@ -33,6 +34,7 @@ public class View extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
 	private static final SimpleDateFormat sdf = new SimpleDateFormat(
 			"MMMMM yyyy");
+	protected static final boolean DEBUG = false;
 
 	private EContentAdapter adapter;
 	private Album album;
@@ -59,15 +61,26 @@ public class View extends ViewPart {
 				sdf.format(a.getReleaseDate())));
 	}
 
-	public void setArtist(Artist a) {
+	public void setArtistFirstName(Artist a) {
 		lblFirstname.setText(a.getFirstName());
+	}
+
+	public void setArtistLastName(Artist a) {
 		lblLastname.setText(a.getLastName());
+	}
+
+	public void setArtistBirthday(Artist a) {
 		lblBirthdate.setText(DateFormat.getDateInstance(DateFormat.LONG)
 				.format(a.getBirthDate()));
-		// country
-		lblCountryCode.setImage(Utils.getImage(Utils.getCountryCodeFlag(a
-				.getCountry().getCode())));
-		lblCountryName.setText(a.getCountry().getName());
+	}
+
+	public void setCountryCode(Country c) {
+		lblCountryCode.setImage(Utils.getImage(Utils.getCountryCodeFlag(c
+				.getCode())));
+	}
+
+	public void setCountryName(Country c) {
+		lblCountryName.setText(c.getName());
 	}
 
 	public void setGenres(EList<Genre> genres) {
@@ -129,6 +142,7 @@ public class View extends ViewPart {
 			}
 			this.album = album;
 			this.album.eAdapters().add(adapter);
+			this.album.getArtist().eAdapters().add(adapter);
 		}
 	}
 
@@ -137,10 +151,39 @@ public class View extends ViewPart {
 		adapter = new EContentAdapter() {
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
+				if (notification.getNotifier() instanceof AlbumDataBase) {
+					switch (notification.getFeatureID(AlbumDataBase.class)) {
+					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
+						System.out.println("View: AlbumDatabase.select()");
+						AlbumDataBaseImpl adb = (AlbumDataBaseImpl) notification
+								.getNotifier();
+						Album a = adb.getSelected();
+						updateAdapter(a);
+						// complete update
+						setAlbumDetails(a);
+						setAlbumDetails(a);
+						setAlbumDetails(a);
+						setArtistFirstName(a.getArtist());
+						setArtistLastName(a.getArtist());
+						setArtistBirthday(a.getArtist());
+						setCountryCode(a.getArtist().getCountry());
+						setCountryName(a.getArtist().getCountry());
+						setGenres(a.getGenres());
+						setRatings(a.getRatings());
+						setSongs(a.getSongs());
+						System.out.println("View: updated.view!");
+						break;
+
+					default:
+						break;
+					}
+				}
+
 				if (notification.getNotifier() instanceof Album) {
-					System.out.println("updating Album... ATTRIBUTE "
-							+ ((EStructuralFeature) notification.getFeature())
-									.getName());
+					if (DEBUG)
+						System.out.println("View: Album.ATTRIBUTE "
+								+ ((EStructuralFeature) notification
+										.getFeature()).getName());
 					Album a = (Album) notification.getNotifier();
 					updateAdapter(a); // create new adapter
 					switch (notification.getFeatureID(Album.class)) {
@@ -151,9 +194,9 @@ public class View extends ViewPart {
 						setAlbumDetails(a);
 						break;
 
-					case MusicPackage.ALBUM__ARTIST:
-						setArtist(a.getArtist());
-						break;
+					// case MusicPackage.ALBUM__ARTIST:
+					// this case is handled by own FEATURE see next switch
+					// break;
 
 					case MusicPackage.ALBUM__GENRES:
 						setGenres(a.getGenres());
@@ -168,32 +211,47 @@ public class View extends ViewPart {
 						break;
 
 					default:
-						System.out.println("Album Feature ID not handled yet: "
-								+ notification.getFeatureID(Album.class));
+						System.out
+								.println("View: Album Feature ID not handled yet: "
+										+ notification
+												.getFeatureID(Album.class));
 						break;
 					}
 					return;
 				}
-				if (notification.getNotifier() instanceof AlbumDataBase) {
-					switch (notification.getFeatureID(AlbumDataBase.class)) {
-					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
-						System.out.println("AlbumDatabase.select()");
-						AlbumDataBaseImpl adb = (AlbumDataBaseImpl) notification
-								.getNotifier();
-						Album a = adb.getSelected();
-						updateAdapter(a);
-						// complete update
-						setAlbumDetails(a);
-						setAlbumDetails(a);
-						setAlbumDetails(a);
-						setArtist(a.getArtist());
-						setGenres(a.getGenres());
-						setRatings(a.getRatings());
-						setSongs(a.getSongs());
-						System.out.println("updated.view!");
-						break;
 
-					default:
+				if (notification.getNotifier() instanceof Artist) {
+					if (DEBUG)
+						System.out.println("View: Artist.ATTRIBUTE "
+								+ ((EStructuralFeature) notification
+										.getFeature()).getName());
+					Artist a = (Artist) notification.getNotifier();
+					switch (notification.getFeatureID(Artist.class)) {
+					case MusicPackage.ARTIST__FIRST_NAME:
+						setArtistFirstName(a);
+						break;
+					case MusicPackage.ARTIST__LAST_NAME:
+						setArtistLastName(a);
+						break;
+					case MusicPackage.ARTIST__BIRTH_DATE:
+						System.out.println("yay!");
+						setArtistBirthday(a);
+						break;
+					}
+				}
+
+				if (notification.getNotifier() instanceof Country) {
+					if (DEBUG)
+						System.out.println("View: Country.ATTRIBUTE "
+								+ ((EStructuralFeature) notification
+										.getFeature()).getName());
+					Country c = (Country) notification.getNotifier();
+					switch (notification.getFeatureID(Country.class)) {
+					case MusicPackage.COUNTRY__CODE:
+						setCountryCode(c);
+						break;
+					case MusicPackage.COUNTRY__NAME:
+						setCountryName(c);
 						break;
 					}
 				}
