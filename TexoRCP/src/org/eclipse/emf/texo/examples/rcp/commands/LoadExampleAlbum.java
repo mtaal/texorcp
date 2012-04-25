@@ -11,7 +11,7 @@ public class LoadExampleAlbum extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Controller.getInstance().getContents().clear();
-		Controller.getInstance().getContents().add(Utils.getSampleAlbum());
+		Controller.getAlbumDataBase().getAlbums().add(Utils.getSampleAlbum());
 		System.out.println("loaded one example album");
 		return null;
 	}

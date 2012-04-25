@@ -1,24 +1,38 @@
 package org.eclipse.emf.texo.examples.rcp.views;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
+import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.Rating;
+import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class ListViewPart extends ViewPart {
@@ -27,6 +41,7 @@ public class ListViewPart extends ViewPart {
 	private Table table;
 	private TableViewer tableViewer;
 	private EContentAdapter adapter;
+	private Album lastSelection;
 
 	public ListViewPart() {
 	}
@@ -42,51 +57,52 @@ public class ListViewPart extends ViewPart {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				System.out.println("<!--");
-				
-				System.out.println("event-Type:\t"+notification.getEventType());
-				System.out.println("notification.getNotifier() = "
-						+ notification.getNotifier());
-				System.out.println("feature:\t"+notification.getFeature());
-				EStructuralFeature feature = (EStructuralFeature) notification.getFeature();
-				if (feature!=null){
-				System.out.println("feature Name: "+feature.getName());
-				System.out.println("-->");
+				// System.out.println("<!--");
+				//
+				// System.out.println("event-Type:\t"
+				// + notification.getEventType());
+				// System.out.println("notification.getNotifier() = "
+				// + notification.getNotifier());
+				// System.out.println("feature:\t" + notification.getFeature());
+				// EStructuralFeature feature = (EStructuralFeature)
+				// notification
+				// .getFeature();
+				// System.out.println("feature ID: "
+				// + notification.getFeatureID(notification.getNotifier()
+				// .getClass()));
+				// if (feature != null) {
+				// System.out.println("feature Name: " + feature.getName());
+				// System.out.println("-->");
+				// }
+				if (notification.getNotifier() instanceof Album) {
+					// update the list too..
+					tableViewer.refresh(true);
+					return;
 				}
-////				super.notifyChanged(notification);
-//				System.out.println("notification.getNotifier() = "
-//						+ notification.getNotifier());
-//				if (notification.getNotifier() instanceof Controller) {
-//					// featureID is always -1 no clue why;
-//					try {
-//						System.out.println("feature changed: "+notification.getFeature());
-////						
-////						IObservableList albumsList = EMFProperties
-////								.list(MusicPackage.Literals.ALBUM_LIST__ALBUMS)
-////								.observe(
-////										Controller.getInstance().getContents());
-////						tableViewer.setInput(albumsList);
-////						System.out.println("now there are "
-////								+ Controller.getInstance().getAlbumList()
-////										.getAlbums().size()
-////								+ " albums in the list");
-//					} catch (Exception e) {
-//						// widget disposed.
-//					}
-//
-//					// switch (notification.getFeatureID(AlbumList.class)) {
-//					// case MusicPackage.ALBUM_LIST__ALBUMS:
-//					// System.out.println("album count changed!");
-//					// break;
-//					//
-//					// default:
-//					// System.out.println(notification.getFeatureID(Controller.class));
-//					// System.out.println("wtf?");
-//					// break;
-//					// }
-//				} else {
-//					System.out.println("ELSE: "+notification.getNotifier());
-//				}
+				if (notification.getNotifier() instanceof AlbumDataBase) {
+					switch (notification.getFeatureID(AlbumDataBase.class)) {
+					case MusicPackage.ALBUM_DATA_BASE__ALBUMS:
+						IObservableList albumsList = EMFProperties.list(
+								MusicPackage.Literals.ALBUM_DATA_BASE__ALBUMS)
+								.observe(
+										((AlbumDataBase) notification
+												.getNotifier()));
+						if (!tableViewer.getTable().isDisposed()) {
+							tableViewer.setInput(albumsList);
+						}
+						System.out.println("now there are " + albumsList.size()
+								+ " albums in the list");
+						return;
+					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
+						Album a = ((AlbumDataBase) notification.getNotifier())
+								.getSelected();
+						System.out.println(a.getName() + " selected.");
+						return;
+
+					default:
+						break;
+					}
+				}
 			}
 		};
 		// register adapter
@@ -107,7 +123,14 @@ public class ListViewPart extends ViewPart {
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnName = tableViewerColumn.getColumn();
-				tblclmnName.setWidth(100);
+				tblclmnName.setWidth(21);
+				// tblclmnName.setText("");
+			}
+			{
+				TableViewerColumn tableViewerColumn = new TableViewerColumn(
+						tableViewer, SWT.NONE);
+				TableColumn tblclmnName = tableViewerColumn.getColumn();
+				tblclmnName.setWidth(75);
 				tblclmnName.setText("Name");
 			}
 			{
@@ -121,15 +144,15 @@ public class ListViewPart extends ViewPart {
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnReleasedIn = tableViewerColumn.getColumn();
-				tblclmnReleasedIn.setWidth(100);
-				tblclmnReleasedIn.setText("released in");
+				tblclmnReleasedIn.setWidth(40);
+				tblclmnReleasedIn.setText("Year");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnSongs = tableViewerColumn.getColumn();
-				tblclmnSongs.setWidth(100);
-				tblclmnSongs.setText("Songs");
+				tblclmnSongs.setWidth(41);
+				tblclmnSongs.setText("Titles");
 			}
 
 			ObservableListContentProvider contentProvider = new ObservableListContentProvider();
@@ -155,6 +178,25 @@ public class ListViewPart extends ViewPart {
 				public void keyPressed(KeyEvent e) {
 				}
 			});
+
+			tableViewer.setLabelProvider(new AlbumListLabelProvider());
+			tableViewer
+					.addSelectionChangedListener(new ISelectionChangedListener() {
+
+						@Override
+						public void selectionChanged(SelectionChangedEvent event) {
+							StructuredSelection selection = (StructuredSelection) tableViewer
+									.getSelection();
+							Controller.getAlbumDataBase().setSelected(
+									(Album) selection.getFirstElement());
+
+							if (lastSelection != null) {
+								lastSelection.eAdapters().remove(adapter);
+							}
+							lastSelection = (Album) selection.getFirstElement();
+							lastSelection.eAdapters().add(adapter);
+						}
+					});
 		}
 	}
 
@@ -165,5 +207,76 @@ public class ListViewPart extends ViewPart {
 
 	public void dispose() {
 		Controller.getRegisterAdapters().remove(adapter);
+	}
+
+	class AlbumListLabelProvider extends LabelProvider implements
+			ITableLabelProvider {
+		public String getColumnText(Object obj, int index) {
+			Album a = (Album) obj;
+			switch (index) {
+			case 0:
+				// RATING
+				int high = 0;
+				for (Iterator<Rating> iterator = a.getRatings().iterator(); iterator
+						.hasNext();) {
+					Rating r = iterator.next();
+					if (r.equals(Rating.HIGH)) {
+						high++;
+					}
+				}
+				int total = a.getRatings().size();
+				double rating = (double) high / (double) total;
+				DecimalFormat f = new DecimalFormat("#0.00");
+				return f.format(rating);
+			case 1:
+				// NAME
+				return a.getName();
+			case 2:
+				// ARTIST
+				return String.format("%s %s", a.getArtist().getFirstName(), a
+						.getArtist().getLastName());
+			case 3:
+				// RELEASE DATE
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+				return sdf.format(a.getReleaseDate());
+			case 4:
+				// SONG COUNT
+				return String.format("%d", a.getSongs().size());
+
+			default:
+				break;
+			}
+			return index + " " + obj.toString();
+		}
+
+		public Image getColumnImage(Object obj, int index) {
+			Album a = (Album) obj;
+			switch (index) {
+			case 0:
+				// rating
+				int high = 0;
+				for (Iterator<Rating> iterator = a.getRatings().iterator(); iterator
+						.hasNext();) {
+					Rating r = iterator.next();
+					if (r.equals(Rating.HIGH)) {
+						high++;
+					}
+				}
+				int total = a.getRatings().size();
+				Rating r = Rating.LOW;
+				if (high > total - high) {
+					r = Rating.HIGH;
+				}
+				return Utils.getImage(Utils.getRating(r));
+
+			default:
+				return null;
+			}
+		}
+
+		public Image getImage(Object obj) {
+			return PlatformUI.getWorkbench().getSharedImages()
+					.getImage(ISharedImages.IMG_OBJ_ELEMENT);
+		}
 	}
 }

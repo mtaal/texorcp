@@ -66,6 +66,7 @@ public class MusicFactoryImpl extends EFactoryImpl implements MusicFactory {
 			case MusicPackage.COUNTRY: return createCountry();
 			case MusicPackage.GENRE: return createGenre();
 			case MusicPackage.SONG: return createSong();
+			case MusicPackage.ALBUM_DATA_BASE: return createAlbumDataBase();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -149,6 +150,16 @@ public class MusicFactoryImpl extends EFactoryImpl implements MusicFactory {
 	public Song createSong() {
 		SongImpl song = new SongImpl();
 		return song;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AlbumDataBase createAlbumDataBase() {
+		AlbumDataBaseImpl albumDataBase = new AlbumDataBaseImpl();
+		return albumDataBase;
 	}
 
 	/**

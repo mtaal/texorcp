@@ -10,10 +10,12 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
+import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
@@ -30,6 +32,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class View extends ViewPart {
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.view";
 	private EContentAdapter adapter;
+	private Album album;
 
 	private BindingFactory bf = BindingFactory.getInstance();
 	private Label lblFirstname;
@@ -61,6 +64,12 @@ public class View extends ViewPart {
 		if (album == null) {
 			return;
 		}
+		if (this.album != null) {
+			this.album.eAdapters().remove(adapter);
+		}
+		this.album = album;
+		this.album.eAdapters().add(adapter);
+
 		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM yyyy");
 		lblAlbumName.setText(String.format("%s (%s)", album.getName(),
 				sdf.format(album.getReleaseDate())));
@@ -130,22 +139,27 @@ public class View extends ViewPart {
 		adapter = new EContentAdapter() {
 
 			public void notifyChanged(Notification notification) {
-//				super.notifyChanged(notification);
-//				try {
-//					if (notification.getNotifier() instanceof Album) {
-//						setAlbum((Album) notification.getNotifier());
-//					} else if (notification.getNotifier() instanceof Artist) {
-//						setArtist((Artist) notification.getNotifier());
-//					} else if (notification.getNotifier() instanceof Country) {
-//						setCountry((Country) notification.getNotifier());
-//					}
-//				} catch (Exception ignoreMe) {
-//					// this raises when we close the application, because emf
-//					// wants to update but the widgets are already disposed
-//				}
+				super.notifyChanged(notification);
+				if (notification.getNotifier() instanceof Album) {
+					// update the list too..
+					System.out.println("updating...");
+					setAlbum((Album) notification.getNotifier());
+					return;
+				}
+				if (notification.getNotifier() instanceof AlbumDataBase) {
+					switch (notification.getFeatureID(AlbumDataBase.class)) {
+					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
+						setAlbum(((AlbumDataBase) notification.getNotifier())
+								.getSelected());
+						break;
+
+					default:
+						break;
+					}
+				}
 			}
 		};
-		
+
 		Controller.getRegisterAdapters().add(adapter);
 		System.out.println("RepresentativeView registered the adapter");
 
@@ -244,13 +258,6 @@ public class View extends ViewPart {
 					3, 1));
 			// COUNTRY NAME -->
 		}
-
-		// get an album if there is already one available
-//		setAlbum(Controller.getInstance().get);
-	}
-
-	public void update() {
-//		setAlbum(Controller.getAlbum());
 	}
 
 	@Override

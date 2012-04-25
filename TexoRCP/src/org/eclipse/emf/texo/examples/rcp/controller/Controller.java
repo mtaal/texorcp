@@ -4,6 +4,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
+import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
 import org.eclipse.emf.texo.examples.rcp.osgi.services.PersistenceService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -12,10 +14,16 @@ import org.osgi.framework.ServiceReference;
 public class Controller extends ResourceImpl {
 	private static Controller instance;
 	private static PersistenceService service;
+	private static AlbumDataBase adb;
+	
+	public static AlbumDataBase getAlbumDataBase() {
+		getInstance();
+		return adb;
+	}
 
 	public static EList<Adapter> getRegisterAdapters() {
-		return getInstance().eAdapters();
-		// return getInstance().getAlbumList().eAdapters();
+//		return getInstance().eAdapters();
+		 return getAlbumDataBase().eAdapters();
 	}
 
 	public static Controller getInstance() {
@@ -25,6 +33,8 @@ public class Controller extends ResourceImpl {
 			connect();
 			// LOADS THE DEFAULT ALBUM
 			// album = Utils.getSampleAlbum();
+			adb = MusicFactory.eINSTANCE.createAlbumDataBase();
+			instance.getContents().add(adb);
 		}
 		return instance;
 	}

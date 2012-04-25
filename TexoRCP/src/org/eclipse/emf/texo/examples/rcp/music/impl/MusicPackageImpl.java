@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
@@ -62,6 +63,13 @@ public class MusicPackageImpl extends EPackageImpl implements MusicPackage {
 	 * @generated
 	 */
 	private EClass songEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass albumDataBaseEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -406,6 +414,33 @@ public class MusicPackageImpl extends EPackageImpl implements MusicPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAlbumDataBase() {
+		return albumDataBaseEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAlbumDataBase_Albums() {
+		return (EReference)albumDataBaseEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAlbumDataBase_Selected() {
+		return (EReference)albumDataBaseEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getRating() {
 		return ratingEEnum;
 	}
@@ -472,6 +507,10 @@ public class MusicPackageImpl extends EPackageImpl implements MusicPackage {
 		createEAttribute(songEClass, SONG__VERSION);
 		createEAttribute(songEClass, SONG__TRACK);
 		createEAttribute(songEClass, SONG__NAME);
+
+		albumDataBaseEClass = createEClass(ALBUM_DATA_BASE);
+		createEReference(albumDataBaseEClass, ALBUM_DATA_BASE__ALBUMS);
+		createEReference(albumDataBaseEClass, ALBUM_DATA_BASE__SELECTED);
 
 		// Create enums
 		ratingEEnum = createEEnum(RATING);
@@ -541,6 +580,10 @@ public class MusicPackageImpl extends EPackageImpl implements MusicPackage {
 		initEAttribute(getSong_Version(), ecorePackage.getELongObject(), "version", null, 0, 1, Song.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSong_Track(), ecorePackage.getEInt(), "track", null, 0, 1, Song.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSong_Name(), ecorePackage.getEString(), "name", null, 0, 1, Song.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(albumDataBaseEClass, AlbumDataBase.class, "AlbumDataBase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAlbumDataBase_Albums(), this.getAlbum(), null, "albums", null, 0, -1, AlbumDataBase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAlbumDataBase_Selected(), this.getAlbum(), null, "selected", null, 0, 1, AlbumDataBase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(ratingEEnum, Rating.class, "Rating");

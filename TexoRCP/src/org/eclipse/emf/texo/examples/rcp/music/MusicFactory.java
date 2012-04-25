@@ -71,6 +71,15 @@ public interface MusicFactory extends EFactory {
 	Song createSong();
 
 	/**
+	 * Returns a new object of class '<em>Album Data Base</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Album Data Base</em>'.
+	 * @generated
+	 */
+	AlbumDataBase createAlbumDataBase();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

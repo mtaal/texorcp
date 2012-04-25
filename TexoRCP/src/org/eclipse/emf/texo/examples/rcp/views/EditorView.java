@@ -13,6 +13,7 @@ import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddGenreDialog;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddRatingDialog;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddSongDialog;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
@@ -70,10 +71,6 @@ public class EditorView extends ViewPart {
 		return parentShell;
 	}
 
-	public void update() {
-		// setAlbum(Controller.getAlbum());
-	}
-
 	private Album getAlbum() {
 		return album;
 	}
@@ -126,7 +123,19 @@ public class EditorView extends ViewPart {
 		adapter = new EContentAdapter() {
 
 			public void notifyChanged(Notification notification) {
-//				super.notifyChanged(notification);
+				super.notifyChanged(notification);
+				if (notification.getNotifier() instanceof AlbumDataBase) {
+					switch (notification.getFeatureID(AlbumDataBase.class)) {
+					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
+						Album a = ((AlbumDataBase) notification
+								.getNotifier()).getSelected();
+						setAlbum(a);
+						break;
+
+					default:
+						break;
+					}
+				}
 			}
 		};
 

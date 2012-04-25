@@ -149,4 +149,9 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlbumDataBase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="albums" upperBound="-1"
+        eType="#//Album"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selected" eType="#//Album"/>
+  </eClassifiers>
 </ecore:EPackage>
