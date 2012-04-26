@@ -32,8 +32,8 @@
             name="Editor View">
       </view>
       <view
-            class="org.eclipse.emf.texo.examples.rcp.views.ListViewPart"
-            id="org.eclipse.emf.texo.examples.rcp.views.ListViewPart"
+            class="org.eclipse.emf.texo.examples.rcp.views.ListView"
+            id="org.eclipse.emf.texo.examples.rcp.views.ListView"
             name="Available Albums">
       </view>
    </extension>
@@ -43,6 +43,10 @@
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
                label="File">
+            <command
+                  commandId="org.eclipse.emf.texo.examples.rcp.commands.newalbum"
+                  label="new album">
+            </command>
             <command
                   commandId="org.eclipse.emf.texo.examples.rcp.commands.loadexamplealbum"
                   label="load example album">
@@ -86,6 +90,11 @@
             defaultHandler="org.eclipse.emf.texo.examples.rcp.commands.LoadExampleAlbum"
             id="org.eclipse.emf.texo.examples.rcp.commands.loadexamplealbum"
             name="load example album">
+      </command>
+      <command
+            defaultHandler="org.eclipse.emf.texo.examples.rcp.commands.NewAlbum"
+            id="org.eclipse.emf.texo.examples.rcp.commands.newalbum"
+            name="new album">
       </command>
    </extension>
 

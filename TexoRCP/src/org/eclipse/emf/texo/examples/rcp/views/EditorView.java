@@ -13,9 +13,9 @@ import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddGenreDialog;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddRatingDialog;
 import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddSongDialog;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
-import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.RCPHelper;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
@@ -61,7 +61,7 @@ public class EditorView extends ViewPart {
 	private TableViewer viewerRating;
 	private ComboViewer cCode;
 	private DateTime dtBirthday;
-	private Album album;
+	// private Album album;
 	private Text txtCountryName;
 
 	public EditorView() {
@@ -71,65 +71,57 @@ public class EditorView extends ViewPart {
 		return parentShell;
 	}
 
-	private Album getAlbum() {
-		return album;
-	}
-
 	public void updateAdapter(Album album) {
-		if (album == null) {
-			return;
-		}
-		// check if its a new album
-		if (this.album != album) {
-			System.out.println("EditorView got a new album " + album);
-			if (this.album != null) {
-				this.album.eAdapters().remove(adapter);
-			}
-			this.album = album;
-			this.album.eAdapters().add(adapter);
-			// create new binding...
+		// drop any existing old bindin!
+		System.out.println("<TEST>");
+		System.out.println(album);
+		System.out.println(album.getArtist());
+		System.out.println(album.getArtist().getCountry());
+		bf.cleanup(getClass());
+		// binding
+		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME, 400);
+		bf.bind(getClass(), releaseDate, album,
+				MusicPackage.Literals.ALBUM__RELEASE_DATE);
 
-			// binding
-			bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME,
-					400);
-			bf.bind(getClass(), releaseDate, album,
-					MusicPackage.Literals.ALBUM__RELEASE_DATE);
+		FeaturePath featureAlbumArtistFirstName = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__FIRST_NAME);
+		bf.bind(getClass(), artistFirstName, album, featureAlbumArtistFirstName, 300);
 
-			// works with FeaturePath and without! - last name example will be
-			// done
-			// with FeaturePath
-			bf.bind(getClass(), artistFirstName, album.getArtist(),
-					MusicPackage.Literals.ARTIST__FIRST_NAME, 300);
+		FeaturePath featureAlbumArtistLastName = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__LAST_NAME);
+		bf.bind(getClass(), artistLastName, album, featureAlbumArtistLastName, 300);
 
-			FeaturePath featureAlbumArtistLastName = FeaturePath.fromList(
-					MusicPackage.Literals.ALBUM__ARTIST,
-					MusicPackage.Literals.ARTIST__LAST_NAME);
-			bf.bind(getClass(), artistLastName, album,
-					featureAlbumArtistLastName, 300);
+		FeaturePath featureAlbumArtistBirthday = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__BIRTH_DATE);
+		bf.bind(getClass(), dtBirthday, album, featureAlbumArtistBirthday);
 
-			FeaturePath featureAlbumArtistBirthday = FeaturePath.fromList(
-					MusicPackage.Literals.ALBUM__ARTIST,
-					MusicPackage.Literals.ARTIST__BIRTH_DATE);
-			bf.bind(getClass(), dtBirthday, album, featureAlbumArtistBirthday);
-			bf.bind(getClass(), cCode, album.getArtist().getCountry(),
-					MusicPackage.Literals.COUNTRY__CODE);
-			bf.bind(getClass(), txtCountryName, album.getArtist().getCountry(),
-					MusicPackage.Literals.COUNTRY__NAME, 300);
+		FeaturePath featureAlbumArtistCountryCode = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__COUNTRY,
+				MusicPackage.Literals.COUNTRY__CODE);
+		bf.bind(getClass(), cCode, album, featureAlbumArtistCountryCode);
 
-			IObservableList ratingData = EMFProperties.list(
-					MusicPackage.Literals.ALBUM__RATINGS).observe(album);
-			viewerRating.setInput(ratingData);
+		FeaturePath featureAlbumArtistCountryName = FeaturePath.fromList(
+				MusicPackage.Literals.ALBUM__ARTIST,
+				MusicPackage.Literals.ARTIST__COUNTRY,
+				MusicPackage.Literals.COUNTRY__NAME);
+		bf.bind(getClass(), txtCountryName, album,
+				featureAlbumArtistCountryName, 300);
 
-			IObservableList genreData = EMFProperties.list(
-					MusicPackage.Literals.ALBUM__GENRES).observe(album);
-			viewerGenre.setInput(genreData);
+		IObservableList ratingData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__RATINGS).observe(album);
+		viewerRating.setInput(ratingData);
 
-			IObservableList songsData = EMFProperties.list(
-					MusicPackage.Literals.ALBUM__SONGS).observe(album);
-			viewerSongs.setInput(songsData);
-		} else {
-			System.out.println("EditorView got the same album again");
-		}
+		IObservableList genreData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__GENRES).observe(album);
+		viewerGenre.setInput(genreData);
+
+		IObservableList songsData = EMFProperties.list(
+				MusicPackage.Literals.ALBUM__SONGS).observe(album);
+		viewerSongs.setInput(songsData);
 	}
 
 	@Override
@@ -139,23 +131,27 @@ public class EditorView extends ViewPart {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof AlbumDataBase) {
-					switch (notification.getFeatureID(AlbumDataBase.class)) {
-					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
-						Album a = ((AlbumDataBase) notification.getNotifier())
-								.getSelected();
-						updateAdapter(a);
-						System.out.println("EditorView.setselection.");
+				// Utils.print("EditorView", notification);
+				if (notification.getNotifier() instanceof RCPHelper) {
+					switch (notification.getFeatureID(RCPHelper.class)) {
+					case MusicPackage.RCP_HELPER__SELECTED:
+						// // complete update
+						System.out.println("new helper selected");
+						updateAdapter((Album) notification.getNewValue());
 						break;
 
 					default:
 						break;
 					}
+				} else {
+					System.out.println("wtf?");
 				}
 			}
 		};
 		// register the eAdapter
-		Controller.getRegisterAdapters().add(adapter);
+		Controller.getRCP().eAdapters().add(adapter);
+		// this view uses binding therefore we do NOT need to register for
+		// current album
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -291,7 +287,7 @@ public class EditorView extends ViewPart {
 					for (Iterator<Rating> iterator = structuredSelection
 							.iterator(); iterator.hasNext();) {
 						Rating g = iterator.next();
-						getAlbum().getRatings().remove(g);
+						Controller.getSelectedAlbum().getRatings().remove(g);
 					}
 				}
 			}
@@ -309,7 +305,7 @@ public class EditorView extends ViewPart {
 				AddRatingDialog d = new AddRatingDialog(getParentShell(),
 						SWT.DIALOG_TRIM);
 				Rating rating = (Rating) d.open();
-				getAlbum().getRatings().add(rating);
+				Controller.getSelectedAlbum().getRatings().add(rating);
 			}
 		});
 		btnAddRating.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
@@ -344,7 +340,7 @@ public class EditorView extends ViewPart {
 					for (Iterator<Genre> iterator = structuredSelection
 							.iterator(); iterator.hasNext();) {
 						Genre g = iterator.next();
-						getAlbum().getGenres().remove(g);
+						Controller.getSelectedAlbum().getGenres().remove(g);
 					}
 				}
 			}
@@ -365,7 +361,7 @@ public class EditorView extends ViewPart {
 						SWT.DIALOG_TRIM);
 				Genre genre = (Genre) d.open();
 				if (genre != null) {
-					album.getGenres().add(genre);
+					Controller.getSelectedAlbum().getGenres().add(genre);
 				}
 			}
 		});
@@ -392,7 +388,7 @@ public class EditorView extends ViewPart {
 					for (Iterator<Song> iterator = structuredSelection
 							.iterator(); iterator.hasNext();) {
 						Song s = iterator.next();
-						album.getSongs().remove(s);
+						Controller.getSelectedAlbum().getSongs().remove(s);
 					}
 				}
 			}
@@ -416,7 +412,7 @@ public class EditorView extends ViewPart {
 						SWT.DIALOG_TRIM);
 				Song song = (Song) s.open();
 				if (s != null) {
-					getAlbum().getSongs().add(song);
+					Controller.getSelectedAlbum().getSongs().add(song);
 				}
 			}
 		});
@@ -425,24 +421,13 @@ public class EditorView extends ViewPart {
 		btnAddSong.setText("add Song");
 	}
 
-	// public void setAlbum(Album album) {
-	// ac.setAlbum(album);
-	// }
+	public void dispose() {
+		Controller.getRCP().eAdapters().remove(adapter);
+		bf.dispose(getClass());
+	}
 
 	@Override
 	public void setFocus() {
-	}
-
-	public void dispose() {
-		try {
-			Controller.getRegisterAdapters().remove(adapter);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		if (album != null) {
-			album.eAdapters().remove(adapter);
-		}
-		bf.dispose(getClass());
 	}
 
 	class RatingsLabelProvider extends LabelProvider implements

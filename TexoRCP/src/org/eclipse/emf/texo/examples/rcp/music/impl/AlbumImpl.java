@@ -10,16 +10,13 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
@@ -28,9 +25,8 @@ import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Album</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Album</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
@@ -49,9 +45,9 @@ import org.eclipse.emf.texo.examples.rcp.music.Song;
  */
 public class AlbumImpl extends EObjectImpl implements Album {
 	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -59,9 +55,9 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	protected static final long ID_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -70,8 +66,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVersion()
 	 * @generated
 	 * @ordered
@@ -80,8 +75,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVersion()
 	 * @generated
 	 * @ordered
@@ -90,8 +84,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -100,8 +93,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -110,8 +102,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getArtist() <em>Artist</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getArtist()
 	 * @generated
 	 * @ordered
@@ -120,8 +111,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The default value of the '{@link #getReleaseDate() <em>Release Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReleaseDate()
 	 * @generated
 	 * @ordered
@@ -130,8 +120,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getReleaseDate() <em>Release Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReleaseDate()
 	 * @generated
 	 * @ordered
@@ -140,8 +129,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getGenres() <em>Genres</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getGenres()
 	 * @generated
 	 * @ordered
@@ -150,8 +138,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getSongs() <em>Songs</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSongs()
 	 * @generated
 	 * @ordered
@@ -160,8 +147,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 
 	/**
 	 * The cached value of the '{@link #getRatings() <em>Ratings</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getRatings()
 	 * @generated
 	 * @ordered
@@ -169,8 +155,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	protected EList<Rating> ratings;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected AlbumImpl() {
@@ -178,8 +163,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -188,8 +172,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public long getId() {
@@ -197,8 +180,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setId(long newId) {
@@ -209,8 +191,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Long getVersion() {
@@ -218,8 +199,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setVersion(Long newVersion) {
@@ -230,8 +210,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getName() {
@@ -239,8 +218,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -251,8 +229,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Artist getArtist() {
@@ -268,8 +245,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Artist basicGetArtist() {
@@ -277,8 +253,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setArtist(Artist newArtist) {
@@ -289,8 +264,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Date getReleaseDate() {
@@ -298,8 +272,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setReleaseDate(Date newReleaseDate) {
@@ -310,8 +283,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Genre> getGenres() {
@@ -322,8 +294,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Song> getSongs() {
@@ -334,8 +305,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Rating> getRatings() {
@@ -346,8 +316,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -375,8 +344,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -415,8 +383,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -451,8 +418,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -479,8 +445,7 @@ public class AlbumImpl extends EObjectImpl implements Album {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -502,4 +467,4 @@ public class AlbumImpl extends EObjectImpl implements Album {
 		return result.toString();
 	}
 
-} //AlbumImpl
+} // AlbumImpl

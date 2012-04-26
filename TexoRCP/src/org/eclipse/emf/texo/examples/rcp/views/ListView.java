@@ -10,8 +10,10 @@ import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
-import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
+import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.RCPHelper;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
@@ -35,15 +37,17 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class ListViewPart extends ViewPart {
+public class ListView extends ViewPart {
 
-	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.ListViewPart"; //$NON-NLS-1$
+	private static final boolean DEBUG = false;
+	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.ListView"; //$NON-NLS-1$
 	private Table table;
 	private TableViewer tableViewer;
 	private EContentAdapter adapter;
-	private Album lastSelection;
 
-	public ListViewPart() {
+	// private Album lastSelection;
+
+	public ListView() {
 	}
 
 	/**
@@ -57,57 +61,32 @@ public class ListViewPart extends ViewPart {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				// System.out.println("<!--");
-				//
-				// System.out.println("event-Type:\t"
-				// + notification.getEventType());
-				// System.out.println("notification.getNotifier() = "
-				// + notification.getNotifier());
-				// System.out.println("feature:\t" + notification.getFeature());
-				// EStructuralFeature feature = (EStructuralFeature)
-				// notification
-				// .getFeature();
-				// System.out.println("feature ID: "
-				// + notification.getFeatureID(notification.getNotifier()
-				// .getClass()));
-				// if (feature != null) {
-				// System.out.println("feature Name: " + feature.getName());
-				// System.out.println("-->");
-				// }
-				if (notification.getNotifier() instanceof Album) {
-					// update the list too..
-					tableViewer.refresh(true);
-					return;
-				}
-				if (notification.getNotifier() instanceof AlbumDataBase) {
-					switch (notification.getFeatureID(AlbumDataBase.class)) {
-					case MusicPackage.ALBUM_DATA_BASE__ALBUMS:
-						IObservableList albumsList = EMFProperties.list(
-								MusicPackage.Literals.ALBUM_DATA_BASE__ALBUMS)
-								.observe(
-										((AlbumDataBase) notification
-												.getNotifier()));
-						if (!tableViewer.getTable().isDisposed()) {
-							tableViewer.setInput(albumsList);
-						}
-						System.out.println("now there are " + albumsList.size()
-								+ " albums in the list");
-						return;
-					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
-						Album a = ((AlbumDataBase) notification.getNotifier())
-								.getSelected();
-						System.out.println(a.getName() + " selected.");
-						return;
+				if (DEBUG)
+					Utils.print("ListView", notification);
+				if (notification.getNotifier() instanceof RCPHelper) {
+					switch (notification.getFeatureID(RCPHelper.class)) {
+					case MusicPackage.RCP_HELPER__ALBUMS:
+						RCPHelper rcp = (RCPHelper) notification.getNotifier();
+						IObservableList albumList = EMFProperties.list(
+								MusicPackage.Literals.RCP_HELPER__ALBUMS)
+								.observe(rcp);
+
+						tableViewer.setInput(albumList);
+						break;
 
 					default:
 						break;
 					}
 				}
+				if (notification.getNotifier() instanceof Album
+						|| notification.getNotifier() instanceof Artist
+						|| notification.getNotifier() instanceof Country) {
+					tableViewer.refresh(true);
+				}
 			}
 		};
 		// register adapter
-		Controller.getRegisterAdapters().add(adapter);
-		System.out.println("ListView registered the adapter");
+		Controller.getRCP().eAdapters().add(adapter);
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -120,25 +99,32 @@ public class ListViewPart extends ViewPart {
 			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 					1));
 			{
+				// rating
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnName = tableViewerColumn.getColumn();
 				tblclmnName.setWidth(21);
-				// tblclmnName.setText("");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnName = tableViewerColumn.getColumn();
-				tblclmnName.setWidth(75);
+				tblclmnName.setWidth(100);
 				tblclmnName.setText("Name");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnArtist = tableViewerColumn.getColumn();
-				tblclmnArtist.setWidth(100);
+				tblclmnArtist.setWidth(148);
 				tblclmnArtist.setText("Artist");
+			}
+			{
+				TableViewerColumn tableViewerColumn = new TableViewerColumn(
+						tableViewer, SWT.NONE);
+				TableColumn tblclmnArtist = tableViewerColumn.getColumn();
+				tblclmnArtist.setWidth(150);
+				tblclmnArtist.setText("Country");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
@@ -151,11 +137,13 @@ public class ListViewPart extends ViewPart {
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(
 						tableViewer, SWT.NONE);
 				TableColumn tblclmnSongs = tableViewerColumn.getColumn();
-				tblclmnSongs.setWidth(41);
+				tblclmnSongs.setWidth(70);
 				tblclmnSongs.setText("Titles");
 			}
 
 			ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+			// ArrayContentProvider contentProvider = new
+			// ArrayContentProvider();
 			tableViewer.setContentProvider(contentProvider);
 			tableViewer.getTable().addKeyListener(new KeyListener() {
 
@@ -187,26 +175,35 @@ public class ListViewPart extends ViewPart {
 						public void selectionChanged(SelectionChangedEvent event) {
 							StructuredSelection selection = (StructuredSelection) tableViewer
 									.getSelection();
-							Controller.getAlbumDataBase().setSelected(
-									(Album) selection.getFirstElement());
-
-							if (lastSelection != null) {
-								lastSelection.eAdapters().remove(adapter);
+							Album oldAlbum = Controller.getRCP().getSelected();
+							if (oldAlbum != null) {
+								oldAlbum.eAdapters().remove(adapter);
+								oldAlbum.getArtist().eAdapters()
+										.remove(adapter);
+								oldAlbum.getArtist().getCountry().eAdapters()
+										.remove(adapter);
 							}
-							lastSelection = (Album) selection.getFirstElement();
-							lastSelection.eAdapters().add(adapter);
+
+							Controller.getRCP().setSelected(
+									(Album) selection.getFirstElement());
+							Controller.getRCP().getSelected().eAdapters()
+									.add(adapter);
+							Controller.getRCP().getSelected().getArtist()
+									.eAdapters().add(adapter);
+							Controller.getRCP().getSelected().getArtist()
+									.getCountry().eAdapters().add(adapter);
 						}
 					});
 		}
 	}
 
+	public void dispose() {
+		Controller.getRCP().eAdapters().remove(adapter);
+	}
+
 	@Override
 	public void setFocus() {
 		// Set the focus
-	}
-
-	public void dispose() {
-		Controller.getRegisterAdapters().remove(adapter);
 	}
 
 	class AlbumListLabelProvider extends LabelProvider implements
@@ -236,10 +233,13 @@ public class ListViewPart extends ViewPart {
 				return String.format("%s %s", a.getArtist().getFirstName(), a
 						.getArtist().getLastName());
 			case 3:
+				// FLAG
+				return a.getArtist().getCountry().getName();
+			case 4:
 				// RELEASE DATE
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 				return sdf.format(a.getReleaseDate());
-			case 4:
+			case 5:
 				// SONG COUNT
 				return String.format("%d", a.getSongs().size());
 
@@ -269,6 +269,9 @@ public class ListViewPart extends ViewPart {
 				}
 				return Utils.getImage(Utils.getRating(r));
 
+			case 3:
+				String code = a.getArtist().getCountry().getCode();
+				return Utils.getImage(Utils.getCountryCodeFlag(code));
 			default:
 				return null;
 			}

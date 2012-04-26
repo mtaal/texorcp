@@ -11,14 +11,13 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
-import org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Country;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.RCPHelper;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
-import org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -37,7 +36,7 @@ public class View extends ViewPart {
 	protected static final boolean DEBUG = false;
 
 	private EContentAdapter adapter;
-	private Album album;
+	private Album currentAlbum;
 
 	private BindingFactory bf = BindingFactory.getInstance();
 	private Label lblFirstname;
@@ -130,49 +129,41 @@ public class View extends ViewPart {
 		}
 	}
 
-	public void updateAdapter(Album album) {
-		if (album == null) {
-			return;
-		}
-		// check if its a new album
-		if (this.album != album) {
-			System.out.println("View got a new album " + album);
-			if (this.album != null) {
-				this.album.eAdapters().remove(adapter);
-			}
-			this.album = album;
-			this.album.eAdapters().add(adapter);
-			this.album.getArtist().eAdapters().add(adapter);
-			this.album.getArtist().getCountry().eAdapters().add(adapter);
-		}
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
 		adapter = new EContentAdapter() {
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof AlbumDataBase) {
-					switch (notification.getFeatureID(AlbumDataBase.class)) {
-					case MusicPackage.ALBUM_DATA_BASE__SELECTED:
-						System.out.println("View: AlbumDatabase.select()");
-						AlbumDataBaseImpl adb = (AlbumDataBaseImpl) notification
-								.getNotifier();
-						Album a = adb.getSelected();
-						updateAdapter(a);
+				Utils.print("View", notification);
+				if (notification.getNotifier() instanceof RCPHelper) {
+					switch (notification.getFeatureID(RCPHelper.class)) {
+					case MusicPackage.RCP_HELPER__SELECTED:
+						if (currentAlbum != null) {
+							currentAlbum.eAdapters().remove(this);
+							currentAlbum.getArtist().eAdapters().remove(this);
+							currentAlbum.getArtist().getCountry().eAdapters()
+									.remove(this);
+						}
+
+						Album newAlbum = (Album) notification.getNewValue();
+
 						// complete update
-						setAlbumDetails(a);
-						setAlbumDetails(a);
-						setAlbumDetails(a);
-						setArtistFirstName(a.getArtist());
-						setArtistLastName(a.getArtist());
-						setArtistBirthday(a.getArtist());
-						setCountryCode(a.getArtist().getCountry());
-						setCountryName(a.getArtist().getCountry());
-						setGenres(a.getGenres());
-						setRatings(a.getRatings());
-						setSongs(a.getSongs());
-						System.out.println("View: updated.view!");
+						setAlbumDetails(newAlbum);
+						setAlbumDetails(newAlbum);
+						setAlbumDetails(newAlbum);
+						setArtistFirstName(newAlbum.getArtist());
+						setArtistLastName(newAlbum.getArtist());
+						setArtistBirthday(newAlbum.getArtist());
+						setCountryCode(newAlbum.getArtist().getCountry());
+						setCountryName(newAlbum.getArtist().getCountry());
+						setGenres(newAlbum.getGenres());
+						setRatings(newAlbum.getRatings());
+						setSongs(newAlbum.getSongs());
+						currentAlbum = newAlbum;
+						currentAlbum.eAdapters().add(this);
+						currentAlbum.getArtist().eAdapters().add(this);
+						currentAlbum.getArtist().getCountry().eAdapters()
+								.add(this);
 						break;
 
 					default:
@@ -186,7 +177,7 @@ public class View extends ViewPart {
 								+ ((EStructuralFeature) notification
 										.getFeature()).getName());
 					Album a = (Album) notification.getNotifier();
-					updateAdapter(a); // create new adapter
+					// updateAdapter(a); // create new adapter
 					switch (notification.getFeatureID(Album.class)) {
 					case MusicPackage.ALBUM__NAME:
 						setAlbumDetails(a);
@@ -260,7 +251,7 @@ public class View extends ViewPart {
 			}
 		};
 		// register the eAdapter
-		Controller.getRegisterAdapters().add(adapter);
+		Controller.getRCP().eAdapters().add(adapter);
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = 0;
@@ -365,14 +356,7 @@ public class View extends ViewPart {
 	}
 
 	public void dispose() {
-		try {
-			Controller.getRegisterAdapters().remove(adapter);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		if (album != null) {
-			album.eAdapters().remove(adapter);
-		}
+		Controller.getRCP().eAdapters().remove(adapter);
 		bf.dispose(getClass());
 	}
 }

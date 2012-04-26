@@ -2,10 +2,12 @@ package org.eclipse.emf.texo.examples.rcp.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Country;
@@ -41,13 +43,14 @@ public class Utils {
 			"ru", "rw", "sa", "sb", "sc", "scotland", "sd", "se", "sg", "sh",
 			"si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "st", "sv", "sy",
 			"sz", "tc", "td", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn",
-			"to", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "um", "us", "uy",
-			"uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wales", "wf",
-			"ws", "ye", "yt", "za", "zm", "zw" };
+			"to", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "um", "unknown",
+			"us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu",
+			"wales", "wf", "ws", "ye", "yt", "za", "zm", "zw" };
 
 	private static Map<String, Image> imageCache = new HashMap<String, Image>();
-	
-	private static SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+	private static SimpleDateFormat formatter = new SimpleDateFormat(
+			"dd.MM.yyyy");
 
 	public static String[] getCountryCodes() {
 		return ccodes;
@@ -77,13 +80,57 @@ public class Utils {
 		}
 	}
 
+	public static Album getNewAlbum() {
+		Album a = MusicFactory.eINSTANCE.createAlbum();
+		a.setId(0);
+		a.setVersion((long) 0);
+		a.setName("");
+		a.setReleaseDate(Calendar.getInstance().getTime());
+		a.setArtist(MusicFactory.eINSTANCE.createArtist());
+		a.getArtist().setFirstName("");
+		a.getArtist().setLastName("");
+		a.getArtist().setId(0);
+		a.getArtist().setCountry(MusicFactory.eINSTANCE.createCountry());
+		a.getArtist().getCountry().setCode("unknown");
+		a.getArtist().getCountry().setName("");
+		a.getArtist().getCountry().setVersion((long) 0);
+		a.getArtist().setGenre(MusicFactory.eINSTANCE.createGenre());
+		a.getArtist().getGenre().setId(0);
+		a.getArtist().getGenre().setName("");
+		a.getArtist().getGenre().setVersion((long) 0);
+		a.getArtist().setBirthDate(Calendar.getInstance().getTime());
+		return a;
+	}
+
+	public static Album getNewTestAlbum() {
+		Album a = MusicFactory.eINSTANCE.createAlbum();
+		a.setId(0);
+		a.setVersion((long) 0);
+		a.setName("");
+		a.setReleaseDate(Calendar.getInstance().getTime());
+		a.setArtist(MusicFactory.eINSTANCE.createArtist());
+		a.getArtist().setFirstName("");
+		a.getArtist().setLastName("");
+		a.getArtist().setId(0);
+		a.getArtist().setCountry(MusicFactory.eINSTANCE.createCountry());
+		a.getArtist().getCountry().setCode("unknown");
+		a.getArtist().getCountry().setName("");
+		a.getArtist().getCountry().setVersion((long) 0);
+		a.getArtist().setGenre(MusicFactory.eINSTANCE.createGenre());
+		a.getArtist().getGenre().setId(0);
+		a.getArtist().getGenre().setName("");
+		a.getArtist().getGenre().setVersion((long) 0);
+		a.getArtist().setBirthDate(Calendar.getInstance().getTime());
+		return a;
+	}
+
 	public static final Album getSampleAlbum() {
 		Album justBeFree = MusicFactory.eINSTANCE.createAlbum();
 		justBeFree.setId(1);
 		justBeFree.setName("Just Be Free");
 		justBeFree.setReleaseDate(getDate("19.6.2001"));
 		justBeFree.setVersion((long) 1);
-		
+
 		justBeFree.getSongs().add(getSong(1, "Just Be Free", 1));
 		justBeFree.getSongs().add(getSong(2, "By Your Side", 2));
 		justBeFree.getSongs().add(getSong(3, "Move It (Dance Mix)", 3));
@@ -96,24 +143,24 @@ public class Utils {
 		justBeFree.getSongs().add(getSong(10, "Running Out Of Time", 10));
 		justBeFree.getSongs().add(getSong(11, "Believe Me (Dance Mix)", 11));
 		justBeFree.getSongs().add(getSong(12, "Just Be Free (remix) ", 12));
-		
+
 		justBeFree.getRatings().add(Rating.HIGH);
 		justBeFree.getRatings().add(Rating.LOW);
 		justBeFree.getRatings().add(Rating.HIGH);
 		justBeFree.getRatings().add(Rating.HIGH);
 		justBeFree.getRatings().add(Rating.LOW);
-		
+
 		Genre pop = MusicFactory.eINSTANCE.createGenre();
 		pop.setId(1);
 		pop.setName("Pop");
 		pop.setVersion((long) 1);
 		justBeFree.getGenres().add(pop);
-		
 
 		Country ny = MusicFactory.eINSTANCE.createCountry();
 		ny.setName("New York, United States");
 		ny.setCode("us");
-		
+		ny.setVersion((long)1);
+
 		Artist artist = MusicFactory.eINSTANCE.createArtist();
 		artist.setBirthDate(getDate("19.12.1980"));
 		artist.setFirstName("Christina");
@@ -122,10 +169,10 @@ public class Utils {
 		artist.setGenre(pop);
 		artist.setCountry(ny);
 		justBeFree.setArtist(artist);
-		
+
 		return justBeFree;
 	}
-	
+
 	private static Song getSong(long id, String name, int track) {
 		Song song = MusicFactory.eINSTANCE.createSong();
 		song.setId(id);
@@ -134,7 +181,7 @@ public class Utils {
 		song.setVersion((long) 1);
 		return song;
 	}
-	
+
 	private static Date getDate(String dateString) {
 		try {
 			return formatter.parse(dateString);
@@ -143,13 +190,26 @@ public class Utils {
 		}
 		return null;
 	}
-	
+
 	public static void center(Shell shell) {
-		Monitor primary = Display.getDefault().getPrimaryMonitor ();
-		Rectangle bounds = primary.getBounds ();
-		Rectangle rect = shell.getBounds ();
+		Monitor primary = Display.getDefault().getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
 		int x = bounds.x + (bounds.width - rect.width) / 2;
 		int y = bounds.y + (bounds.height - rect.height) / 2;
-		shell.setLocation (x, y);
+		shell.setLocation(x, y);
+	}
+
+	public static void print(String pre, Notification notification) {
+		System.out.println("<!-- "+pre);
+		System.out.println(pre + ": notification.getEventType() : "
+				+ notification.getEventType());
+		System.out.println(pre + ": notification.getFeature() : "
+				+ notification.getFeature());
+		System.out.println(pre + ": notification.getNotifier() : "
+				+ notification.getNotifier());
+		System.out.println(pre + ": notification.getNewValue() : "
+				+ notification.getNewValue());
+		System.out.println(pre +" -->");
 	}
 }

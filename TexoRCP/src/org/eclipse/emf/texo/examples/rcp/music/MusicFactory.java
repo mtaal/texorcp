@@ -71,13 +71,13 @@ public interface MusicFactory extends EFactory {
 	Song createSong();
 
 	/**
-	 * Returns a new object of class '<em>Album Data Base</em>'.
+	 * Returns a new object of class '<em>RCP Helper</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Album Data Base</em>'.
+	 * @return a new object of class '<em>RCP Helper</em>'.
 	 * @generated
 	 */
-	AlbumDataBase createAlbumDataBase();
+	RCPHelper createRCPHelper();
 
 	/**
 	 * Returns the package supported by this factory.

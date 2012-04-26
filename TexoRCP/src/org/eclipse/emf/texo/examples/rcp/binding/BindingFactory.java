@@ -130,8 +130,7 @@ public class BindingFactory {
 						binding = context.bindValue(
 								WidgetProperties.text(SWT.Modify).observe(
 										control),
-								EMFProperties.value(featurePath).observe(
-										eObject), string2ClassStrategy,
+								EMFProperties.value(featurePath).observe(eObject), string2ClassStrategy,
 								class2Stringstrategy);
 					}
 				} else if (control instanceof Label) {
@@ -143,6 +142,7 @@ public class BindingFactory {
 					binding = context.bindValue(WidgetProperties.selection()
 							.observe(viewer.getControl()),
 							EMFProperties.value(featurePath).observe(eObject));
+					System.err.println("selecting... CountryCode: "+EMFProperties.value(featurePath).observe(eObject).getValue());
 				} else if (control instanceof DateTime
 						|| control instanceof Button) {
 					binding = context.bindValue(WidgetProperties.selection()
@@ -179,8 +179,9 @@ public class BindingFactory {
 	 * @param clazz
 	 */
 	public void dispose(Class<?> clazz) {
-		if (contexts.containsKey(contexts)) {
-			contexts.get(clazz).dispose();
+		if (contexts.containsKey(clazz)) {
+			EMFDataBindingContext context = contexts.get(clazz);
+			context.dispose();
 			contexts.remove(clazz);
 		}
 	}

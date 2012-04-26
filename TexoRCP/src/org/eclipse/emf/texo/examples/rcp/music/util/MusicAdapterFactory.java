@@ -92,8 +92,8 @@ public class MusicAdapterFactory extends AdapterFactoryImpl {
 				return createSongAdapter();
 			}
 			@Override
-			public Adapter caseAlbumDataBase(AlbumDataBase object) {
-				return createAlbumDataBaseAdapter();
+			public Adapter caseRCPHelper(RCPHelper object) {
+				return createRCPHelperAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -186,16 +186,16 @@ public class MusicAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase <em>Album Data Base</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper <em>RCP Helper</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase
+	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper
 	 * @generated
 	 */
-	public Adapter createAlbumDataBaseAdapter() {
+	public Adapter createRCPHelperAdapter() {
 		return null;
 	}
 

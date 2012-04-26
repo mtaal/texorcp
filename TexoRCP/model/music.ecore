@@ -147,9 +147,10 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AlbumDataBase">
+  <eClassifiers xsi:type="ecore:EClass" name="RCPHelper">
     <eStructuralFeatures xsi:type="ecore:EReference" name="albums" upperBound="-1"
-        eType="#//Album"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="selected" eType="#//Album"/>
+        eType="#//Album" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selected" eType="#//Album"
+        transient="true"/>
   </eClassifiers>
 </ecore:EPackage>

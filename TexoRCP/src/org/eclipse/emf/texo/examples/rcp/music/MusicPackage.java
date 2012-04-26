@@ -381,14 +381,14 @@ public interface MusicPackage extends EPackage {
 	int SONG_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl <em>Album Data Base</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl <em>RCP Helper</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl
-	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getAlbumDataBase()
+	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl
+	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getRCPHelper()
 	 * @generated
 	 */
-	int ALBUM_DATA_BASE = 5;
+	int RCP_HELPER = 5;
 
 	/**
 	 * The feature id for the '<em><b>Albums</b></em>' reference list.
@@ -397,7 +397,7 @@ public interface MusicPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALBUM_DATA_BASE__ALBUMS = 0;
+	int RCP_HELPER__ALBUMS = 0;
 
 	/**
 	 * The feature id for the '<em><b>Selected</b></em>' reference.
@@ -406,16 +406,16 @@ public interface MusicPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALBUM_DATA_BASE__SELECTED = 1;
+	int RCP_HELPER__SELECTED = 1;
 
 	/**
-	 * The number of structural features of the '<em>Album Data Base</em>' class.
+	 * The number of structural features of the '<em>RCP Helper</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALBUM_DATA_BASE_FEATURE_COUNT = 2;
+	int RCP_HELPER_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}' enum.
@@ -754,36 +754,36 @@ public interface MusicPackage extends EPackage {
 	EAttribute getSong_Name();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase <em>Album Data Base</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper <em>RCP Helper</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Album Data Base</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase
+	 * @return the meta object for class '<em>RCP Helper</em>'.
+	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper
 	 * @generated
 	 */
-	EClass getAlbumDataBase();
+	EClass getRCPHelper();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase#getAlbums <em>Albums</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getAlbums <em>Albums</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Albums</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase#getAlbums()
-	 * @see #getAlbumDataBase()
+	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getAlbums()
+	 * @see #getRCPHelper()
 	 * @generated
 	 */
-	EReference getAlbumDataBase_Albums();
+	EReference getRCPHelper_Albums();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase#getSelected <em>Selected</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getSelected <em>Selected</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Selected</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.AlbumDataBase#getSelected()
-	 * @see #getAlbumDataBase()
+	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getSelected()
+	 * @see #getRCPHelper()
 	 * @generated
 	 */
-	EReference getAlbumDataBase_Selected();
+	EReference getRCPHelper_Selected();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}'.
@@ -1068,14 +1068,14 @@ public interface MusicPackage extends EPackage {
 		EAttribute SONG__NAME = eINSTANCE.getSong_Name();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl <em>Album Data Base</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl <em>RCP Helper</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.AlbumDataBaseImpl
-		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getAlbumDataBase()
+		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl
+		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getRCPHelper()
 		 * @generated
 		 */
-		EClass ALBUM_DATA_BASE = eINSTANCE.getAlbumDataBase();
+		EClass RCP_HELPER = eINSTANCE.getRCPHelper();
 
 		/**
 		 * The meta object literal for the '<em><b>Albums</b></em>' reference list feature.
@@ -1083,7 +1083,7 @@ public interface MusicPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ALBUM_DATA_BASE__ALBUMS = eINSTANCE.getAlbumDataBase_Albums();
+		EReference RCP_HELPER__ALBUMS = eINSTANCE.getRCPHelper_Albums();
 
 		/**
 		 * The meta object literal for the '<em><b>Selected</b></em>' reference feature.
@@ -1091,7 +1091,7 @@ public interface MusicPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ALBUM_DATA_BASE__SELECTED = eINSTANCE.getAlbumDataBase_Selected();
+		EReference RCP_HELPER__SELECTED = eINSTANCE.getRCPHelper_Selected();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}' enum.

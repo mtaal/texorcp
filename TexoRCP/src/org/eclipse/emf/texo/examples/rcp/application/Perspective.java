@@ -11,7 +11,7 @@ public class Perspective implements IPerspectiveFactory {
 		layout.setFixed(false);
 		{
 			IFolderLayout folderLayout = layout.createFolder("folder", IPageLayout.TOP, 0.5f, IPageLayout.ID_EDITOR_AREA);
-			folderLayout.addView("org.eclipse.emf.texo.examples.rcp.views.ListViewPart");
+			folderLayout.addView("org.eclipse.emf.texo.examples.rcp.views.ListView");
 		}
 		layout.addView("org.eclipse.emf.texo.examples.rcp.views.view", IPageLayout.BOTTOM, 0.18f, "folder");
 		layout.addView("org.eclipse.emf.texo.examples.rcp.views.editorview", IPageLayout.RIGHT, 0.5f, "org.eclipse.emf.texo.examples.rcp.views.view");
