@@ -45,8 +45,6 @@ public class ListView extends ViewPart {
 	private TableViewer tableViewer;
 	private EContentAdapter adapter;
 
-	// private Album lastSelection;
-
 	public ListView() {
 	}
 

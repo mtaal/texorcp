@@ -136,7 +136,6 @@ public class EditorView extends ViewPart {
 					switch (notification.getFeatureID(RCPHelper.class)) {
 					case MusicPackage.RCP_HELPER__SELECTED:
 						// // complete update
-						System.out.println("new helper selected");
 						updateAdapter((Album) notification.getNewValue());
 						break;
 

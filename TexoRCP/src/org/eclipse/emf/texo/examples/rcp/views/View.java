@@ -204,10 +204,6 @@ public class View extends ViewPart {
 						break;
 
 					default:
-						System.out
-								.println("View: Album Feature ID not handled yet: "
-										+ notification
-												.getFeatureID(Album.class));
 						break;
 					}
 					return;
@@ -241,7 +237,6 @@ public class View extends ViewPart {
 					Country c = (Country) notification.getNotifier();
 					switch (notification.getFeatureID(Country.class)) {
 					case MusicPackage.COUNTRY__CODE:
-						System.out.println("setting country code");
 						setCountryCode(c);
 						break;
 					case MusicPackage.COUNTRY__NAME:

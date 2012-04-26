@@ -142,7 +142,6 @@ public class BindingFactory {
 					binding = context.bindValue(WidgetProperties.selection()
 							.observe(viewer.getControl()),
 							EMFProperties.value(featurePath).observe(eObject));
-					System.err.println("selecting... CountryCode: "+EMFProperties.value(featurePath).observe(eObject).getValue());
 				} else if (control instanceof DateTime
 						|| control instanceof Button) {
 					binding = context.bindValue(WidgetProperties.selection()
