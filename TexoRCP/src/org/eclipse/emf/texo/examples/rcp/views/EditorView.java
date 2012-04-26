@@ -47,6 +47,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class EditorView extends ViewPart {
+	private static final boolean DEBUG = false;
 	public static final String ID = "org.eclipse.emf.texo.examples.rcp.views.editorview";
 	private Text name;
 	private DateTime releaseDate;
@@ -73,10 +74,6 @@ public class EditorView extends ViewPart {
 
 	public void updateAdapter(Album album) {
 		// drop any existing old bindin!
-		System.out.println("<TEST>");
-		System.out.println(album);
-		System.out.println(album.getArtist());
-		System.out.println(album.getArtist().getCountry());
 		bf.cleanup(getClass());
 		// binding
 		bf.bind(getClass(), name, album, MusicPackage.Literals.ALBUM__NAME, 400);
@@ -86,12 +83,14 @@ public class EditorView extends ViewPart {
 		FeaturePath featureAlbumArtistFirstName = FeaturePath.fromList(
 				MusicPackage.Literals.ALBUM__ARTIST,
 				MusicPackage.Literals.ARTIST__FIRST_NAME);
-		bf.bind(getClass(), artistFirstName, album, featureAlbumArtistFirstName, 300);
+		bf.bind(getClass(), artistFirstName, album,
+				featureAlbumArtistFirstName, 300);
 
 		FeaturePath featureAlbumArtistLastName = FeaturePath.fromList(
 				MusicPackage.Literals.ALBUM__ARTIST,
 				MusicPackage.Literals.ARTIST__LAST_NAME);
-		bf.bind(getClass(), artistLastName, album, featureAlbumArtistLastName, 300);
+		bf.bind(getClass(), artistLastName, album, featureAlbumArtistLastName,
+				300);
 
 		FeaturePath featureAlbumArtistBirthday = FeaturePath.fromList(
 				MusicPackage.Literals.ALBUM__ARTIST,
@@ -131,7 +130,8 @@ public class EditorView extends ViewPart {
 
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				// Utils.print("EditorView", notification);
+				if (DEBUG)
+					Utils.print("EditorView", notification);
 				if (notification.getNotifier() instanceof RCPHelper) {
 					switch (notification.getFeatureID(RCPHelper.class)) {
 					case MusicPackage.RCP_HELPER__SELECTED:

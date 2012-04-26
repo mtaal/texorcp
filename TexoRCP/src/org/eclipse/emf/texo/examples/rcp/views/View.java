@@ -134,7 +134,8 @@ public class View extends ViewPart {
 		adapter = new EContentAdapter() {
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-				Utils.print("View", notification);
+				if (DEBUG)
+					Utils.print("View", notification);
 				if (notification.getNotifier() instanceof RCPHelper) {
 					switch (notification.getFeatureID(RCPHelper.class)) {
 					case MusicPackage.RCP_HELPER__SELECTED:
