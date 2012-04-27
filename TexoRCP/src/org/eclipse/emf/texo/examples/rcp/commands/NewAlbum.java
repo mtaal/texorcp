@@ -11,9 +11,8 @@ public class NewAlbum extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Controller.getInstance().getContents().clear();
 		Album a = Utils.getNewTestAlbum();
-		Controller.getRCP().getAlbums().add(a);
+		Controller.add(a);
 		System.out.println("added a new album");
 		return null;
 	}

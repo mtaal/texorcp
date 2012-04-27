@@ -1,8 +1,8 @@
 package org.eclipse.emf.texo.examples.rcp.application;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.eclipse.ui.IFolderLayout;
 
 public class Perspective implements IPerspectiveFactory {
 

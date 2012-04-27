@@ -56,11 +56,11 @@ public class AddRatingDialog extends Dialog {
 	private void createContents() {
 		shlCreateNewGenre = new Shell(getParent(), getStyle());
 		shlCreateNewGenre.setSize(450, 84);
-		shlCreateNewGenre.setText("add a genre...");
 		shlCreateNewGenre.setLayout(new GridLayout(1, false));
 		
 		combo = new CCombo(shlCreateNewGenre, SWT.BORDER);
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		combo.setEditable(false);
 		Rating[] values = Rating.values();
 		String[] vals = new String[values.length];
 		for (int i = 0; i < vals.length; i++) {

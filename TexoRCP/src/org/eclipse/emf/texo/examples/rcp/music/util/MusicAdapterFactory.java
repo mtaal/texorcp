@@ -8,12 +8,14 @@ package org.eclipse.emf.texo.examples.rcp.music.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
-
-import org.eclipse.emf.texo.examples.rcp.music.*;
+import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
+import org.eclipse.emf.texo.examples.rcp.music.Genre;
+import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.Song;
 
 /**
  * <!-- begin-user-doc -->
@@ -90,10 +92,6 @@ public class MusicAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSong(Song object) {
 				return createSongAdapter();
-			}
-			@Override
-			public Adapter caseRCPHelper(RCPHelper object) {
-				return createRCPHelperAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -182,20 +180,6 @@ public class MusicAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSongAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper <em>RCP Helper</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper
-	 * @generated
-	 */
-	public Adapter createRCPHelperAdapter() {
 		return null;
 	}
 

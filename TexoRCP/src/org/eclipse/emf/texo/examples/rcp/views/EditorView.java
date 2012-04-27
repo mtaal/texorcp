@@ -6,6 +6,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.binding.BindingFactory;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
@@ -15,7 +16,6 @@ import org.eclipse.emf.texo.examples.rcp.gui.widgets.edit.AddSongDialog;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Genre;
 import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
-import org.eclipse.emf.texo.examples.rcp.music.RCPHelper;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.music.Song;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
@@ -132,23 +132,23 @@ public class EditorView extends ViewPart {
 				super.notifyChanged(notification);
 				if (DEBUG)
 					Utils.print("EditorView", notification);
-				if (notification.getNotifier() instanceof RCPHelper) {
-					switch (notification.getFeatureID(RCPHelper.class)) {
-					case MusicPackage.RCP_HELPER__SELECTED:
+				if (notification.getNotifier() instanceof Resource) {
+					switch (notification.getFeatureID(Resource.class)) {
+					case Resource.RESOURCE__CONTENTS:
 						// // complete update
+						if (notification.getNewValue() instanceof Album)
 						updateAdapter((Album) notification.getNewValue());
 						break;
 
 					default:
 						break;
 					}
-				} else {
-					System.out.println("wtf?");
 				}
 			}
 		};
 		// register the eAdapter
-		Controller.getRCP().eAdapters().add(adapter);
+		Controller.add(adapter);
+		Controller.addSelectedAlbumAdapter(adapter);
 		// this view uses binding therefore we do NOT need to register for
 		// current album
 
@@ -421,7 +421,7 @@ public class EditorView extends ViewPart {
 	}
 
 	public void dispose() {
-		Controller.getRCP().eAdapters().remove(adapter);
+		Controller.remove(adapter);
 		bf.dispose(getClass());
 	}
 

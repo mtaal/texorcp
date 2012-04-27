@@ -71,15 +71,6 @@ public interface MusicFactory extends EFactory {
 	Song createSong();
 
 	/**
-	 * Returns a new object of class '<em>RCP Helper</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>RCP Helper</em>'.
-	 * @generated
-	 */
-	RCPHelper createRCPHelper();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

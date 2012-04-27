@@ -179,22 +179,6 @@
     <element xmi:type="ecore:EClass" href="music.ecore#//Song"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_kr23W4rGEeG8csyc97W2UA" x="385" y="141"/>
   </children>
-  <children xmi:type="notation:Node" xmi:id="_nn4qoI6XEeGZ9qGs6oqO7Q" type="1001">
-    <children xmi:type="notation:Node" xmi:id="_nn4qo46XEeGZ9qGs6oqO7Q" type="4001"/>
-    <children xmi:type="notation:Node" xmi:id="_nn4qpI6XEeGZ9qGs6oqO7Q" type="5001">
-      <styles xmi:type="notation:DrawerStyle" xmi:id="_nn4qpY6XEeGZ9qGs6oqO7Q"/>
-      <styles xmi:type="notation:SortingStyle" xmi:id="_nn4qpo6XEeGZ9qGs6oqO7Q"/>
-      <styles xmi:type="notation:FilteringStyle" xmi:id="_nn4qp46XEeGZ9qGs6oqO7Q"/>
-    </children>
-    <children xmi:type="notation:Node" xmi:id="_nn4qqI6XEeGZ9qGs6oqO7Q" type="5002">
-      <styles xmi:type="notation:DrawerStyle" xmi:id="_nn4qqY6XEeGZ9qGs6oqO7Q"/>
-      <styles xmi:type="notation:SortingStyle" xmi:id="_nn4qqo6XEeGZ9qGs6oqO7Q"/>
-      <styles xmi:type="notation:FilteringStyle" xmi:id="_nn4qq46XEeGZ9qGs6oqO7Q"/>
-    </children>
-    <styles xmi:type="notation:ShapeStyle" xmi:id="_nn4qoY6XEeGZ9qGs6oqO7Q" fontColor="4210752" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="music.ecore#//AlbumDataBase"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nn4qoo6XEeGZ9qGs6oqO7Q" x="230" y="480"/>
-  </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_kraLYYrGEeG8csyc97W2UA"/>
   <element xmi:type="ecore:EPackage" href="music.ecore#/"/>
   <edges xmi:type="notation:Edge" xmi:id="_kr23bYrGEeG8csyc97W2UA" type="3002" source="_krjVUIrGEeG8csyc97W2UA" target="_krtGdIrGEeG8csyc97W2UA">
@@ -266,29 +250,5 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ksABTYrGEeG8csyc97W2UA" points="[0, 0, -129, 76]$[129, -76, 0, 0]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_kuFr8YrGEeG8csyc97W2UA" id="(0.7452229299363057,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_kuFr8orGEeG8csyc97W2UA" id="(0.4968152866242038,1.0)"/>
-  </edges>
-  <edges xmi:type="notation:Edge" xmi:id="_q_ffoI6XEeGZ9qGs6oqO7Q" type="3002" source="_nn4qoI6XEeGZ9qGs6oqO7Q" target="_krtGXorGEeG8csyc97W2UA">
-    <children xmi:type="notation:Node" xmi:id="_q_ffpI6XEeGZ9qGs6oqO7Q" type="4011">
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_q_ffpY6XEeGZ9qGs6oqO7Q" x="-10" y="-10"/>
-    </children>
-    <children xmi:type="notation:Node" xmi:id="_q_ffpo6XEeGZ9qGs6oqO7Q" type="4012">
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_q_ffp46XEeGZ9qGs6oqO7Q" x="10" y="10"/>
-    </children>
-    <styles xmi:type="notation:ConnectorStyle" xmi:id="_q_ffoY6XEeGZ9qGs6oqO7Q" lineColor="4210752"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_q_ffoo6XEeGZ9qGs6oqO7Q" fontColor="4210752" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="music.ecore#//AlbumDataBase/albums"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_q_ffo46XEeGZ9qGs6oqO7Q" points="[-2, -20, -12, 111]$[-67, -130, -77, 1]"/>
-  </edges>
-  <edges xmi:type="notation:Edge" xmi:id="_zzUTcI6cEeGZ9qGs6oqO7Q" type="3002" source="_nn4qoI6XEeGZ9qGs6oqO7Q" target="_krtGXorGEeG8csyc97W2UA">
-    <children xmi:type="notation:Node" xmi:id="_zzUTdI6cEeGZ9qGs6oqO7Q" type="4011">
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_zzUTdY6cEeGZ9qGs6oqO7Q" x="-10" y="-10"/>
-    </children>
-    <children xmi:type="notation:Node" xmi:id="_zzUTdo6cEeGZ9qGs6oqO7Q" type="4012">
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_zzUTd46cEeGZ9qGs6oqO7Q" x="10" y="10"/>
-    </children>
-    <styles xmi:type="notation:ConnectorStyle" xmi:id="_zzUTcY6cEeGZ9qGs6oqO7Q" lineColor="4210752"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_zzUTco6cEeGZ9qGs6oqO7Q" fontColor="4210752" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="music.ecore#//AlbumDataBase/selected"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_zzUTc46cEeGZ9qGs6oqO7Q" points="[-2, -20, -12, 111]$[-67, -128, -77, 3]"/>
   </edges>
 </notation:Diagram>

@@ -4,19 +4,16 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.texo.examples.rcp.controller.Controller;
 import org.eclipse.emf.texo.examples.rcp.music.Album;
 import org.eclipse.emf.texo.examples.rcp.music.Artist;
 import org.eclipse.emf.texo.examples.rcp.music.Country;
-import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
-import org.eclipse.emf.texo.examples.rcp.music.RCPHelper;
 import org.eclipse.emf.texo.examples.rcp.music.Rating;
 import org.eclipse.emf.texo.examples.rcp.util.Utils;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -61,17 +58,14 @@ public class ListView extends ViewPart {
 				super.notifyChanged(notification);
 				if (DEBUG)
 					Utils.print("ListView", notification);
-				if (notification.getNotifier() instanceof RCPHelper) {
-					switch (notification.getFeatureID(RCPHelper.class)) {
-					case MusicPackage.RCP_HELPER__ALBUMS:
-						RCPHelper rcp = (RCPHelper) notification.getNotifier();
-						IObservableList albumList = EMFProperties.list(
-								MusicPackage.Literals.RCP_HELPER__ALBUMS)
-								.observe(rcp);
-
-						tableViewer.setInput(albumList);
+				if (notification.getNotifier() instanceof Resource) {
+					switch (notification.getFeatureID(Resource.class)) {
+					case Resource.RESOURCE__CONTENTS:
+						tableViewer.setInput(Controller.getAlbums());
 						break;
-
+					case Resource.RESOURCE__IS_MODIFIED:
+						System.out.println("res mod.");
+						break;
 					default:
 						break;
 					}
@@ -79,12 +73,14 @@ public class ListView extends ViewPart {
 				if (notification.getNotifier() instanceof Album
 						|| notification.getNotifier() instanceof Artist
 						|| notification.getNotifier() instanceof Country) {
-					tableViewer.refresh(true);
+					if (!tableViewer.getTable().isDisposed()) {
+						tableViewer.refresh(true);
+					}
 				}
 			}
 		};
 		// register adapter
-		Controller.getRCP().eAdapters().add(adapter);
+		Controller.add(adapter);
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -139,9 +135,9 @@ public class ListView extends ViewPart {
 				tblclmnSongs.setText("Titles");
 			}
 
-			ObservableListContentProvider contentProvider = new ObservableListContentProvider();
-			// ArrayContentProvider contentProvider = new
-			// ArrayContentProvider();
+			// ObservableListContentProvider contentProvider = new
+			// ObservableListContentProvider();
+			ArrayContentProvider contentProvider = new ArrayContentProvider();
 			tableViewer.setContentProvider(contentProvider);
 			tableViewer.getTable().addKeyListener(new KeyListener() {
 
@@ -155,8 +151,9 @@ public class ListView extends ViewPart {
 						for (Iterator<Album> iterator = structuredSelection
 								.iterator(); iterator.hasNext();) {
 							Album a = iterator.next();
-							Controller.getInstance().getContents().remove(a);
+							Controller.remove(a);
 						}
+						tableViewer.refresh(true);
 					}
 				}
 
@@ -173,7 +170,10 @@ public class ListView extends ViewPart {
 						public void selectionChanged(SelectionChangedEvent event) {
 							StructuredSelection selection = (StructuredSelection) tableViewer
 									.getSelection();
-							Album oldAlbum = Controller.getRCP().getSelected();
+							final Album oldAlbum = Controller
+									.getSelectedAlbum();
+							final Album newAlbum = (Album) selection
+									.getFirstElement();
 							if (oldAlbum != null) {
 								oldAlbum.eAdapters().remove(adapter);
 								oldAlbum.getArtist().eAdapters()
@@ -182,21 +182,15 @@ public class ListView extends ViewPart {
 										.remove(adapter);
 							}
 
-							Controller.getRCP().setSelected(
-									(Album) selection.getFirstElement());
-							Controller.getRCP().getSelected().eAdapters()
-									.add(adapter);
-							Controller.getRCP().getSelected().getArtist()
-									.eAdapters().add(adapter);
-							Controller.getRCP().getSelected().getArtist()
-									.getCountry().eAdapters().add(adapter);
+							Controller.setSelectedAlbum(newAlbum);
 						}
 					});
 		}
 	}
 
 	public void dispose() {
-		Controller.getRCP().eAdapters().remove(adapter);
+		Controller.remove(adapter);
+		Controller.removeSelectedAlbumAdapter(adapter);
 	}
 
 	@Override

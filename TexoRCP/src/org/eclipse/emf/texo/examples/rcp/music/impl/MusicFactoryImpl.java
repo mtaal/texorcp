@@ -10,12 +10,16 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.eclipse.emf.texo.examples.rcp.music.*;
+import org.eclipse.emf.texo.examples.rcp.music.Album;
+import org.eclipse.emf.texo.examples.rcp.music.Artist;
+import org.eclipse.emf.texo.examples.rcp.music.Country;
+import org.eclipse.emf.texo.examples.rcp.music.Genre;
+import org.eclipse.emf.texo.examples.rcp.music.MusicFactory;
+import org.eclipse.emf.texo.examples.rcp.music.MusicPackage;
+import org.eclipse.emf.texo.examples.rcp.music.Rating;
+import org.eclipse.emf.texo.examples.rcp.music.Song;
 
 /**
  * <!-- begin-user-doc -->
@@ -66,7 +70,6 @@ public class MusicFactoryImpl extends EFactoryImpl implements MusicFactory {
 			case MusicPackage.COUNTRY: return createCountry();
 			case MusicPackage.GENRE: return createGenre();
 			case MusicPackage.SONG: return createSong();
-			case MusicPackage.RCP_HELPER: return createRCPHelper();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -150,16 +153,6 @@ public class MusicFactoryImpl extends EFactoryImpl implements MusicFactory {
 	public Song createSong() {
 		SongImpl song = new SongImpl();
 		return song;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RCPHelper createRCPHelper() {
-		RCPHelperImpl rcpHelper = new RCPHelperImpl();
-		return rcpHelper;
 	}
 
 	/**

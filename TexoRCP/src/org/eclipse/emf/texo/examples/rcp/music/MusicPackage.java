@@ -381,43 +381,6 @@ public interface MusicPackage extends EPackage {
 	int SONG_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl <em>RCP Helper</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl
-	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getRCPHelper()
-	 * @generated
-	 */
-	int RCP_HELPER = 5;
-
-	/**
-	 * The feature id for the '<em><b>Albums</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RCP_HELPER__ALBUMS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Selected</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RCP_HELPER__SELECTED = 1;
-
-	/**
-	 * The number of structural features of the '<em>RCP Helper</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RCP_HELPER_FEATURE_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -425,7 +388,7 @@ public interface MusicPackage extends EPackage {
 	 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getRating()
 	 * @generated
 	 */
-	int RATING = 6;
+	int RATING = 5;
 
 
 	/**
@@ -754,38 +717,6 @@ public interface MusicPackage extends EPackage {
 	EAttribute getSong_Name();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper <em>RCP Helper</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>RCP Helper</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper
-	 * @generated
-	 */
-	EClass getRCPHelper();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getAlbums <em>Albums</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Albums</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getAlbums()
-	 * @see #getRCPHelper()
-	 * @generated
-	 */
-	EReference getRCPHelper_Albums();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getSelected <em>Selected</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Selected</em>'.
-	 * @see org.eclipse.emf.texo.examples.rcp.music.RCPHelper#getSelected()
-	 * @see #getRCPHelper()
-	 * @generated
-	 */
-	EReference getRCPHelper_Selected();
-
-	/**
 	 * Returns the meta object for enum '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1066,32 +997,6 @@ public interface MusicPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SONG__NAME = eINSTANCE.getSong_Name();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl <em>RCP Helper</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.RCPHelperImpl
-		 * @see org.eclipse.emf.texo.examples.rcp.music.impl.MusicPackageImpl#getRCPHelper()
-		 * @generated
-		 */
-		EClass RCP_HELPER = eINSTANCE.getRCPHelper();
-
-		/**
-		 * The meta object literal for the '<em><b>Albums</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RCP_HELPER__ALBUMS = eINSTANCE.getRCPHelper_Albums();
-
-		/**
-		 * The meta object literal for the '<em><b>Selected</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RCP_HELPER__SELECTED = eINSTANCE.getRCPHelper_Selected();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.emf.texo.examples.rcp.music.Rating <em>Rating</em>}' enum.

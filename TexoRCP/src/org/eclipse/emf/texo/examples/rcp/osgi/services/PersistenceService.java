@@ -21,7 +21,11 @@ public interface PersistenceService {
 
 	public Boolean isConnected();
 
+	public boolean save(EObject data);
+
 	public boolean save(EList<EObject> data);
+
+	public <E extends EObject> EList<E> get(EObject type, int id);
 
 	public EList<EObject> load();
 }

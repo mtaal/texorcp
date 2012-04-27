@@ -12,9 +12,7 @@ public class LoadExampleAlbum extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Album a = Utils.getSampleAlbum();
-		Controller.getRCP().getAlbums().clear();
-		Controller.getRCP().getAlbums().add(a);
-		System.out.println("loaded one example album");
+		Controller.add(a);
 		return null;
 	}
 }

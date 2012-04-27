@@ -26,9 +26,9 @@ public class Load extends AbstractHandler {
 		// }
 		// Controller.getInstance().getAlbumList().getAlbums().clear();
 		// Controller.getInstance().getAlbumList().getAlbums().addAll(albums);
-		Controller.getInstance().getContents().clear();
+		Controller.getResource().getContents().clear();
 		EList<EObject> list = Controller.load();
-		Controller.getInstance().getContents().addAll(list);
+		Controller.getResource().getContents().addAll(list);
 		System.out.println("loaded " + list.size() + "albums from XML");
 		return null;
 	}
